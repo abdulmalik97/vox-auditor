@@ -21,11 +21,7 @@ const ActivityLog = () => {
   ];
 
   return (
-    <div className="m-5 max-w-screen-2xl mx-auto">
-    <div className="mx-auto">
-      <Table columns={columns} data={data} />
-    </div>
-  </div>
+    <></>
   );
 };
 

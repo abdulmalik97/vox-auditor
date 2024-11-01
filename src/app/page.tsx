@@ -1,7 +1,10 @@
-import Image from "next/image";
+import { Container, Typography } from "@mui/material";
 
-export default function Home() {
+
+const Home = () => {
   return (
-    <div></div>
+    <Typography>Welcome to Voxology Dashboard.</Typography>
   );
-}
+};
+
+export default Home;

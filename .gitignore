@@ -12,6 +12,7 @@ tmp/
 tsconfig.tsbuildinfo
 package-lock.json
 tmp
+.next
 
 # debug
 npm-debug.log*
