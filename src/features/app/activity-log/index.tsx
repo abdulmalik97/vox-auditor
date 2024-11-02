@@ -29,7 +29,7 @@ const ActivityLogView = () => {
 
   return (
     <Container maxWidth={"xl"}>
-      <Box p={3}>
+      <Box>
         <Table rows={rows} columns={columns} title={"Activity Log"} />
       </Box>
     </Container>

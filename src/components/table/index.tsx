@@ -15,7 +15,7 @@ const Table = ({ rows, columns, title }: TableProps) => {
   const paginationModel = { page: 0, pageSize: 25 };
 
   return (
-    <Paper sx={{ height: "75vh", width: "100%", borderRadius: 2, overflow: 'hidden' }}>
+    <Paper sx={{ height: "80vh", width: "100%", borderRadius: 2, overflow: 'hidden' }}>
       {title && (
         <Box sx={{ p: 2 }}>
           <Typography variant="h6">{title}</Typography>
