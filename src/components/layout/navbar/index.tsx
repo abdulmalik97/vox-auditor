@@ -11,19 +11,17 @@ const Navbar = () => {
     <AppBar position="static" color="secondary">
       <Container maxWidth="xl">
         <Toolbar disableGutters>
-          {/* Logo on the left */}
           <Box>
             <Link href={"/"}>
               <Image
                 src="/assets/logo.png"
-                width={100}
-                height={75}
+                width={125}
+                height={95}
                 alt="Logo"
               />
             </Link>
           </Box>
-          {/* Tabs centered */}
-          <Box sx={{ flexGrow: 1, display: 'flex', justifyContent: 'center' }}>
+          <Box sx={{ display: 'flex', justifyContent: 'center' }}>
             <Box p={2}>
               <Link href={"/activity-log"} color="inherit">
                 <Typography>Activity Log</Typography>
@@ -34,17 +32,11 @@ const Navbar = () => {
                 <Typography>Patients</Typography>
               </Link>
             </Box>
-          </Box>
-
-          <Box>
-            <Link href={"/"}>
-              <Image
-                src="/assets/logo.png"
-                width={100}
-                height={75}
-                alt="Logo"
-              />
-            </Link>
+            <Box p={2}>
+              <Link href={"/appointments"} color="inherit">
+                <Typography>Appointments</Typography>
+              </Link>
+            </Box>
           </Box>
         </Toolbar>
       </Container>

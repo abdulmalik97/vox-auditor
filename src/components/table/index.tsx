@@ -1,11 +1,28 @@
+import * as React from "react";
+import { DataGrid, GridColDef } from "@mui/x-data-grid";
+import Paper from "@mui/material/Paper";
 
 interface TableProps {
-  columns: string[]; // Array of column headers
-  data: { [key: string]: string | number }[]; // Array of objects representing rows with key-value pairs for cell data
+  rows: any[];
+  columns: GridColDef[];
 }
 
-const Table = ({ columns, data }: TableProps) => {
- 
+const Table = ({ rows, columns }: TableProps) => {
+
+  const paginationModel = { page: 0, pageSize: 25 };
+  
+  return (
+    <Paper sx={{ height: "75vh", width: "100%" }}>
+      <DataGrid
+        rows={rows}
+        columns={columns}
+        initialState={{ pagination: { paginationModel } }}
+        pageSizeOptions={[5, 10]}
+        checkboxSelection
+        sx={{ border: 0 }}
+      />
+    </Paper>
+  );
 };
 
 export default Table;

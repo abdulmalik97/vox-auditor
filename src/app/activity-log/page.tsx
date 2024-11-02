@@ -1,27 +1,8 @@
-import Table from "../../components/table";
+import View from "@/features/activity-log";
 
 const ActivityLog = () => {
-  const columns = ["Full Name", "Email", "Group"];
-  const data = [
-    {
-      "Full Name": "Danilo Sousa",
-      Email: "danilo@example.com",
-      Group: "Developer",
-    },
-    {
-      "Full Name": "Zahra Ambessa",
-      Email: "zahra@example.com",
-      Group: "Admin",
-    },
-    {
-      "Full Name": "Jasper Eriksson",
-      Email: "jasper@example.com",
-      Group: "Developer",
-    },
-  ];
-
   return (
-    <></>
+    <View />
   );
 };
 

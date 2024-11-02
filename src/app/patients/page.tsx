@@ -1,5 +1,7 @@
-const Patients = () => {
-    return <h1>Patients</h1>;
-  };
+import { Typography } from "@mui/material";
 
-  export default Patients
+const Patients = () => {
+  return <Typography>Welcome to the patients page.</Typography>;
+};
+
+export default Patients;

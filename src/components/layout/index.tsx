@@ -1,4 +1,4 @@
-import { Box, Container, Stack } from "@mui/material";
+import { Container } from "@mui/material";
 import Navbar from "./navbar";
 
 interface LayoutProps {

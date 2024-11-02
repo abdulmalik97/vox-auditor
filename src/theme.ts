@@ -4,8 +4,6 @@ import {
     createTheme,
     responsiveFontSizes,
   } from '@mui/material/styles';
-  import { createBreakpoints } from '@mui/system';
-  const breakpoints = createBreakpoints({});
   
   /**
    * Theme developed at:
@@ -32,7 +30,7 @@ import {
         },
         text: {
           primary: '#000000',
-          secondary: '#fff',
+          secondary: '#ffffff',
         },
         background: {
           default: '#F5F5F5',
@@ -52,6 +50,16 @@ import {
                     },
                 },
             },
+        },
+        MuiCheckbox: {
+          styleOverrides: {
+            root: {
+              color: "#808080",
+              "&.Mui-checked": {
+                color: "#808080",
+              },
+            },
+          },
         },
     },
     })
