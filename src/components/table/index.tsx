@@ -3,6 +3,7 @@ import { DataGrid, GridColDef } from "@mui/x-data-grid";
 import Paper from "@mui/material/Paper";
 
 interface TableProps {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   rows: any[];
   columns: GridColDef[];
 }
