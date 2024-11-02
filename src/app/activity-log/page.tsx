@@ -1,8 +1,8 @@
-import View from "@/features/activity-log";
+import ActivityLogView from "@/features/app/activity-log";
 
 const ActivityLog = () => {
   return (
-    <View />
+    <ActivityLogView />
   );
 };
 

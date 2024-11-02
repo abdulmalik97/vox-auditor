@@ -2,7 +2,8 @@ import Table from "@/components/table";
 import { Box, Container } from "@mui/material";
 import { GridColDef } from "@mui/x-data-grid";
 
-const View = () => {
+const ActivityLogView = () => {
+  
   const columns: GridColDef[] = [
     { field: "id", headerName: "ID", width: 70 },
     { field: "firstName", headerName: "First name", width: 130 },
@@ -29,10 +30,10 @@ const View = () => {
   return (
     <Container maxWidth={"xl"}>
       <Box p={3}>
-        <Table rows={rows} columns={columns} />
+        <Table rows={rows} columns={columns} title={"Activity Log"} />
       </Box>
     </Container>
   );
 };
 
-export default View;
+export default ActivityLogView;

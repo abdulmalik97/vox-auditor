@@ -1,5 +1,4 @@
-import { Container } from "@mui/material";
-import Navbar from "./navbar";
+import Sidebar from "./sidebar";
 
 interface LayoutProps {
   children: React.ReactNode;
@@ -8,10 +7,7 @@ interface LayoutProps {
 const Layout = ({ children }: LayoutProps) => {
   return (
     <>
-      <Container maxWidth={false} disableGutters>
-      <Navbar />
-        {children}
-      </Container>
+     <Sidebar>{children}</Sidebar>
     </>
   );
 };
