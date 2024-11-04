@@ -10,7 +10,7 @@ export class ActivityLogPrivateApi {
     console.log("Making call with endpoint ", endpoint);
 
     try {
-      const response = await fetch(`${endpoint}/get_activity_log`, { cache: 'no-store' });
+      const response = await fetch(`${endpoint}/get_activity_log`);
       
       if (!response.ok) {
         console.log('Error getting activity log');
