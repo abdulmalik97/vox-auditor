@@ -5,9 +5,10 @@ import axios from "axios";
 export class ActivityLogPrivateApi {
     
   /**
-   * Gets call activity log 
+   * Gets call activity log
    */
   static async getActivityLog() {
+    console.log("Making call with endpoint ", endpoint)
     const response = await axios
       .get( `${endpoint}/get_activity_log`)
       .catch(() => {
@@ -16,6 +17,7 @@ export class ActivityLogPrivateApi {
       });
 
     if (response?.data) {
+      console.log(response?.data)
       return response.data as ActivityLogEntry[];
     } else {
       throw Error("No activity log data returned");
