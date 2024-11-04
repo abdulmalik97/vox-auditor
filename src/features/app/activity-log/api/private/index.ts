@@ -1,6 +1,5 @@
 import { endpoint } from "@/constants";
 import { ActivityLogEntry } from "../../model";
-import axios from "axios";
 
 export class ActivityLogPrivateApi {
     
@@ -8,18 +7,22 @@ export class ActivityLogPrivateApi {
    * Gets call activity log
    */
   static async getActivityLog() {
-    console.log("Making call with endpoint ", endpoint)
-    const response = await axios
-      .get( `${endpoint}/get_activity_log`)
-      .catch(() => {
+    console.log("Making call with endpoint ", endpoint);
+
+    try {
+      const response = await fetch(`${endpoint}/get_activity_log`);
+      
+      if (!response.ok) {
         console.log('Error getting activity log');
         return undefined;
-      });
+      }
 
-    if (response?.data) {
-      console.log(response?.data)
-      return response.data as ActivityLogEntry[];
-    } else {
+      const data = await response.json();
+      console.log(data);
+
+      return data as ActivityLogEntry[];
+    } catch (error) {
+      console.error('Error getting activity log', error);
       throw Error("No activity log data returned");
     }
   }
