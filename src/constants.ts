@@ -9,7 +9,7 @@ const environment = process.env.NODE_ENV
 
 
 const devEndpoint = 'http://127.0.0.1:8000';
-const prodEndpoint = 'https://voxology-development-efgzgjccbdghdkgu.canadacentral-01.azurewebsites.net';
+const prodEndpoint = 'https://voxology-app-0962ec6f2b52.herokuapp.com';
 
 // Use the environment to set the endpoint
 export const endpoint = environment === 'production' ? prodEndpoint : devEndpoint;
