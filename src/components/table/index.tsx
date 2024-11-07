@@ -12,7 +12,6 @@ interface TableProps {
 }
 
 const Table = ({ rows, title }: TableProps) => {
-  const paginationModel = { page: 0, pageSize: 25 };
 
   const generateHeader = (input: string): string => {
     return input
@@ -53,7 +52,6 @@ const Table = ({ rows, title }: TableProps) => {
         rows={rows}
         columns={generateColumns()}
         initialState={{
-          pagination: { paginationModel },
           columns: {
             columnVisibilityModel: {
               id: false,
