@@ -1,3 +1,5 @@
+"use client";
+
 import * as React from "react";
 import { DataGrid, GridColDef } from "@mui/x-data-grid";
 import Paper from "@mui/material/Paper";
@@ -8,16 +10,16 @@ interface TableProps {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   rows: any[];
   columnOrder?: string[];
+  columnsToExclude?: string[];
   title?: string; // Optional title for the table
+  onRowClick?: (row: any) => void; // Optional callback for row click
 }
 
-const Table = ({ rows, title }: TableProps) => {
-
+const Table = ({ rows, title, columnsToExclude, onRowClick }: TableProps) => {
   const generateHeader = (input: string): string => {
     return input
-      .split("_")
-      .map((word) => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
-      .join(" ");
+      .replace(/([a-z])([A-Z])/g, "$1 $2")
+      .replace(/^./, (str) => str.toUpperCase());
   };
 
   const generateColumns = () => {
@@ -27,7 +29,13 @@ const Table = ({ rows, title }: TableProps) => {
       const firstEntry = rows[0];
 
       for (const key of Object.keys(firstEntry)) {
-        columns.push({ field: key, headerName: generateHeader(key), flex: 1 });
+        if (!columnsToExclude?.includes(key)) {
+          columns.push({
+            field: key,
+            headerName: generateHeader(key),
+            flex: 1,
+          });
+        }
       }
     }
 
@@ -59,8 +67,19 @@ const Table = ({ rows, title }: TableProps) => {
           },
         }}
         pageSizeOptions={[5, 10]}
-        checkboxSelection
-        sx={{ border: 0 }}
+        sx={{
+          border: 0,
+          "& .MuiDataGrid-cell:focus": {
+            outline: "none", // Removes focus outline around cells
+          },
+          "& .MuiDataGrid-cell:focus-visible": {
+            outline: "none", // Removes focus outline when cell is focused
+          },
+        }}
+        onRowClick={(param) => {
+          // Execute the callback if provided
+          onRowClick?.(param.row);
+        }}
       />
     </Paper>
   );

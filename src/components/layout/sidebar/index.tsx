@@ -6,8 +6,6 @@ import Toolbar from "@mui/material/Toolbar";
 import Box from "@mui/material/Box";
 import MenuIcon from "@mui/icons-material/Menu";
 import NoteAltIcon from "@mui/icons-material/NoteAlt";
-import PersonIcon from "@mui/icons-material/Person";
-import CallIcon from "@mui/icons-material/Call";
 import Image from "next/image";
 import {
   CssBaseline,
@@ -48,9 +46,9 @@ const Sidebar = ({ children }: SidebarProps) => {
   };
 
   const tabs = [
-    { text: "Activity Log", href: "/activity-log", icon: <CallIcon /> },
-    { text: "Patients", href: "/patients", icon: <PersonIcon /> },
-    { text: "Appointments", href: "/appointments", icon: <NoteAltIcon /> },
+    // { text: "Activity Log", href: "/activity-log", icon: <CallIcon /> },
+    // { text: "Patients", href: "/patients", icon: <PersonIcon /> },
+    { text: "Prescriptions", href: "/vox/prescription-requests", icon: <NoteAltIcon /> },
   ];
 
   const drawer = (
