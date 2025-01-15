@@ -11,8 +11,9 @@ interface TableProps {
   rows: any[];
   columnOrder?: string[];
   columnsToExclude?: string[];
-  title?: string; // Optional title for the table
-  onRowClick?: (row: any) => void; // Optional callback for row click
+  title?: string;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  onRowClick?: (row: any) => void;
 }
 
 const Table = ({ rows, title, columnsToExclude, onRowClick }: TableProps) => {

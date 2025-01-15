@@ -16,7 +16,7 @@ const PrescriptionRequestsView = ({
   const [modalOpen, setModalOpen] = useState(false);
   const [refillRequest, setRefillRequest] =
     useState<PrescriptionRefillRequest | null>(null);
-  const [notes, setNotes] = useState<string>("");
+  // const [_notes, setNotes] = useState<string>("");
 
   const handleOpenModal = (refillRequest: PrescriptionRefillRequest) => {
     setRefillRequest(refillRequest);
@@ -25,10 +25,10 @@ const PrescriptionRequestsView = ({
 
   const handleCloseModal = () => {
     setModalOpen(false);
-    setNotes("");
+    // setNotes("");
   };
 
-  const handleSubmit = (submittedNotes: string) => {
+  const handleSubmit = () => {
     handleCloseModal();
   };
 
