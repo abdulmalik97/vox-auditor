@@ -1,22 +1,35 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Container, Box } from "@mui/material";
 import PrescriptionConfirmationModal from "./components/prescrption-confirmation";
 import { PrescriptionRefillRequest } from "./model";
 import Table from "@/components/table";
+import { useAccount } from "@/contexts/account";
+import { PrescriptionRequestsPrivateApi } from "./api/private";
 
-interface PrescriptionRequestsViewProps {
-  prescriptionRefillRequests: PrescriptionRefillRequest[];
-}
+const PrescriptionRequestsView = () => {
+  const { currentAccount } = useAccount();
 
-const PrescriptionRequestsView = ({
-  prescriptionRefillRequests,
-}: PrescriptionRequestsViewProps) => {
+  useEffect(() => {
+    if (currentAccount) {
+      const practiceId = currentAccount.practice.practiceId;
+      PrescriptionRequestsPrivateApi.getPrescriptionRequests(practiceId).then(
+        (requests) => {
+          if (requests) {
+            setPrescriptionRefillRequests(requests);
+          }
+        }
+      );
+    }
+  }, [currentAccount]);
+
   const [modalOpen, setModalOpen] = useState(false);
+  const [prescriptionRefillRequests, setPrescriptionRefillRequests] = useState<
+    PrescriptionRefillRequest[]
+  >([]);
   const [refillRequest, setRefillRequest] =
     useState<PrescriptionRefillRequest | null>(null);
-  // const [_notes, setNotes] = useState<string>("");
 
   const handleOpenModal = (refillRequest: PrescriptionRefillRequest) => {
     setRefillRequest(refillRequest);
@@ -25,10 +38,15 @@ const PrescriptionRequestsView = ({
 
   const handleCloseModal = () => {
     setModalOpen(false);
-    // setNotes("");
   };
 
-  const handleSubmit = () => {
+  const handleSubmit = async (notes: string) => {
+    if (refillRequest) {
+      await PrescriptionRequestsPrivateApi.confirmPrescriptionRequest(
+        refillRequest.id,
+        notes
+      );
+    }
     handleCloseModal();
   };
 
@@ -48,7 +66,6 @@ const PrescriptionRequestsView = ({
         />
         <Table
           rows={prescriptionRefillRequests}
-          title={"Prescriptions"}
           columnsToExclude={["practiceId", "locationId"]}
           onRowClick={(refillRequest: PrescriptionRefillRequest) => {
             handleOpenModal(refillRequest);

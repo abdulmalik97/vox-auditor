@@ -28,17 +28,10 @@ const theme = responsiveFontSizes(
       error: {
         main: "#ff0033",
       },
-      text: {
-        primary: "#000000",
-        secondary: "#ffffff",
-      },
+
       background: {
         default: "#F5F5F5",
       },
-    },
-    typography: {
-      fontFamily:
-        '"Muli", "Roboto", "Helvetica", "Arial", "Poppins", sans-serif',
     },
     components: {
       MuiLink: {

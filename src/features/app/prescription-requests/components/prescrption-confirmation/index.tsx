@@ -54,7 +54,7 @@ const PrescriptionConfirmationModal = ({
         }}
       >
         <Typography variant="h6" sx={{ marginBottom: 2 }}>
-          Confirm Prescription Refill
+          <b>Confirm Prescription Refill</b>
         </Typography>
 
         {/* Prescription Details */}
@@ -89,7 +89,8 @@ const PrescriptionConfirmationModal = ({
 
         {/* Notes TextField */}
         <TextField
-          label="Notes"
+          label="Notes For Patient"
+          placeholder={"Any notes such as the pharmacy the the patient needs to pick the prescription at."}
           multiline
           rows={4}
           variant="outlined"
@@ -103,7 +104,7 @@ const PrescriptionConfirmationModal = ({
           <Button onClick={onClose} sx={{ marginRight: 1 }}>
             Cancel
           </Button>
-          <Button onClick={handleSubmit} variant="contained" color="primary">
+          <Button onClick={handleSubmit} variant="contained" color="primary" disabled={notes.trim() === ""}>
             Confirm
           </Button>
         </Box>

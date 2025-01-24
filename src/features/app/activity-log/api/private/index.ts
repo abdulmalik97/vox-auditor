@@ -18,7 +18,6 @@ export class ActivityLogPrivateApi {
       }
 
       const data = await response.json();
-      console.log(data);
 
       return data as ActivityLogEntry[];
     } catch (error) {

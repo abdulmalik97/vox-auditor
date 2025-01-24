@@ -1,4 +1,5 @@
 import Layout from "@/components/layout";
+import { useAccount } from "@/contexts/account";
 import { createClient } from "@/utils/supabase/server";
 import { redirect } from "next/navigation";
 
@@ -17,5 +18,5 @@ export default async function RootLayout({
     redirect("/auth/sign-in");
   }
 
-  return <Layout>{children}</Layout>;
+  return <Layout authUser={user}>{children}</Layout>;
 }

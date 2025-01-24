@@ -46,7 +46,7 @@ const Table = ({ rows, title, columnsToExclude, onRowClick }: TableProps) => {
   return (
     <Paper
       sx={{
-        height: "80vh",
+        height: "95vh",
         width: "100%",
         borderRadius: 2,
         overflow: "hidden",

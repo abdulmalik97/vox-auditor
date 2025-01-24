@@ -2,19 +2,15 @@ import { endpoint } from "@/constants";
 import { PrescriptionRefillRequest } from "../../model";
 
 export class PrescriptionRequestsPrivateApi {
-    
-  /**
-   * Gets call activity log
-   */
-  static async getPrescriptionRequests() {
-    console.log("Making call with endpoint ", endpoint);
-
+  
+  static async getPrescriptionRequests(practiceId: string) {
     try {
-      const locationId = '4abc4129-7178-4ff1-b264-78bc7967fb22';
-      const response = await fetch(`${endpoint}/api/prescription/request?locationId=${locationId}`);
-      
+      const response = await fetch(
+        `${endpoint}/api/prescription/refill/request?practiceId=${practiceId}`
+      );
+
       if (!response.ok) {
-        console.log('Error getting prescription requests');
+        console.log("Error getting prescription requests");
         return undefined;
       }
 
@@ -22,8 +18,41 @@ export class PrescriptionRequestsPrivateApi {
 
       return data as PrescriptionRefillRequest[];
     } catch (error) {
-      console.error('Error getting prescription requests', error);
+      console.error("Error getting prescription requests", error);
       throw Error("No prescription request data returned");
+    }
+  }
+
+  static async confirmPrescriptionRequest(
+    prescriptionRefillRequestId: string,
+    notes: string
+  ) {
+    try {
+      const response = await fetch(
+        `${endpoint}/api/prescription/refill/request/confirm`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            prescriptionRefillRequestId,
+            notes,
+          }),
+        }
+      );
+
+      if (!response.ok) {
+        console.log("Error confirming prescription request");
+        return undefined;
+      }
+
+      const data = await response.json();
+
+      return data as PrescriptionRefillRequest[];
+    } catch (error) {
+      console.error("Error confirming prescription requests", error);
+      throw new Error("Error confirming prescription requests");
     }
   }
 }

@@ -49,6 +49,7 @@ const Sidebar = ({ children }: SidebarProps) => {
     // { text: "Activity Log", href: "/activity-log", icon: <CallIcon /> },
     // { text: "Patients", href: "/patients", icon: <PersonIcon /> },
     { text: "Prescriptions", href: "/vox/prescription-requests", icon: <NoteAltIcon /> },
+    { text: "Appointments", href: "/vox/appointment-requests", icon: <NoteAltIcon /> },
   ];
 
   const drawer = (
