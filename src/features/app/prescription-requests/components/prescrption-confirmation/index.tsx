@@ -128,13 +128,13 @@ const PrescriptionConfirmationModal = ({
             variant="contained"
             color="primary"
             disabled={notes.trim() === "" || isConfirmingPrescription}
-            startIcon={
+            endIcon={
               isConfirmingPrescription ? (
                 <CircularProgress size={24} color="inherit" />
               ) : null
             }
           >
-            {isConfirmingPrescription ? "Submitting..." : "Confirm"}
+            {isConfirmingPrescription ? "Submitting" : "Confirm"}
           </Button>
         </Box>
       </Box>

@@ -9,7 +9,7 @@ import Stack from "@mui/material/Stack";
 import MuiCard from "@mui/material/Card";
 import { styled } from "@mui/material/styles";
 import theme from "@/theme";
-import { Typography } from "@mui/material";
+import { CircularProgress, Typography } from "@mui/material";
 
 const Card = styled(MuiCard)(({ theme }) => ({
   display: "flex",
@@ -50,8 +50,10 @@ const SignInPage = ({ signInAction }: SignPageProps) => {
   const [emailErrorMessage, setEmailErrorMessage] = React.useState("");
   const [passwordErrorMessage, setPasswordErrorMessage] = React.useState("");
   const [signInError, setSignInError] = React.useState("");
+  const [isSigningIn, setIsSigningIn] = React.useState<boolean>(false);
 
   const validateInputs = async (e: React.FormEvent) => {
+    setIsSigningIn(true);
     e.preventDefault(); // Prevent form submission
 
     const email = (document.getElementById("email") as HTMLInputElement).value;
@@ -87,6 +89,7 @@ const SignInPage = ({ signInAction }: SignPageProps) => {
       const error = await signInAction(formData);
       setSignInError(error);
     }
+    setIsSigningIn(false);
   };
 
   return (
@@ -116,6 +119,7 @@ const SignInPage = ({ signInAction }: SignPageProps) => {
               color={"secondary"}
               helperText={emailErrorMessage}
               error={emailError}
+              onChange={() => setSignInError("")}
               slotProps={{
                 inputLabel: {
                   style: {
@@ -137,6 +141,7 @@ const SignInPage = ({ signInAction }: SignPageProps) => {
               color="secondary" // The color for the input itself
               helperText={passwordErrorMessage}
               error={passwordError}
+              onChange={() => setSignInError("")}
               slotProps={{
                 inputLabel: {
                   style: {
@@ -147,15 +152,21 @@ const SignInPage = ({ signInAction }: SignPageProps) => {
             />
           </FormControl>
 
-          <Typography >{signInError}</Typography>
+          <Typography>{signInError}</Typography>
 
           <Button
             type="submit"
             fullWidth
             variant="contained"
-            sx={{ marginTop: theme.spacing(2) }}
+            sx={{ marginTop: theme.spacing(2), position: "relative" }}
+            disabled={isSigningIn}
+            endIcon={
+              isSigningIn ? (
+                <CircularProgress size={24} color="inherit" />
+              ) : null
+            }
           >
-            Sign In
+             {isSigningIn ? "Signing In" : "Sign In"}
           </Button>
         </Box>
       </Card>
