@@ -4,8 +4,16 @@ import { Account } from "@/contexts/account/context";
 export class AccountApi {
   static async getAccount(email: string) {
     try {
-
-      const response = await fetch(`${endpoint}/api/account?email=${encodeURIComponent(email)}`);
+      const response = await fetch(
+        `${endpoint}/api/account?email=${encodeURIComponent(email)}`,
+        {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+            "ngrok-skip-browser-warning": "69420", //to skip local browser warning using ngrok
+          },
+        }
+      );
 
       if (!response.ok) {
         console.log("Error getting account.");

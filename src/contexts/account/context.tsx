@@ -1,4 +1,4 @@
-"use client"
+"use client";
 
 import { AccountApi } from "@/features/app/auth/api";
 import { AuthUser } from "@supabase/supabase-js";
@@ -17,6 +17,7 @@ export interface Account {
     locations: {
       [locationId: string]: {
         providers: string[];
+        facilityName: string;
       };
     };
   };
