@@ -10,6 +10,13 @@ import { PrescriptionRequestsPrivateApi } from "./api/private";
 
 const PrescriptionRequestsView = () => {
   const { currentAccount } = useAccount();
+  const [modalOpen, setModalOpen] = useState(false);
+  const [prescriptionRefillRequests, setPrescriptionRefillRequests] = useState<
+    PrescriptionRefillRequest[]
+  >([]);
+  const [refillRequest, setRefillRequest] =
+    useState<PrescriptionRefillRequest | null>(null);
+  const [tableLoading, setTableLoading] = useState<boolean>(true);
 
   useEffect(() => {
     if (currentAccount) {
@@ -18,18 +25,12 @@ const PrescriptionRequestsView = () => {
         (requests) => {
           if (requests) {
             setPrescriptionRefillRequests(requests);
+            setTableLoading(false);
           }
         }
       );
     }
   }, [currentAccount]);
-
-  const [modalOpen, setModalOpen] = useState(false);
-  const [prescriptionRefillRequests, setPrescriptionRefillRequests] = useState<
-    PrescriptionRefillRequest[]
-  >([]);
-  const [refillRequest, setRefillRequest] =
-    useState<PrescriptionRefillRequest | null>(null);
 
   const handleOpenModal = (refillRequest: PrescriptionRefillRequest) => {
     setRefillRequest(refillRequest);
@@ -46,7 +47,13 @@ const PrescriptionRequestsView = () => {
         refillRequest.id,
         notes
       );
+
+      // Remove request from table
+      const updatedPrescriptionRefillRequests =
+        prescriptionRefillRequests.filter((prr) => prr.id !== refillRequest.id);
+      setPrescriptionRefillRequests(updatedPrescriptionRefillRequests);
     }
+    
     handleCloseModal();
   };
 
@@ -66,6 +73,8 @@ const PrescriptionRequestsView = () => {
         />
         <Table
           rows={prescriptionRefillRequests}
+          loading={tableLoading}
+          title={"Prescription Refill Requests"}
           columnsToExclude={["practiceId", "locationId"]}
           onRowClick={(refillRequest: PrescriptionRefillRequest) => {
             handleOpenModal(refillRequest);
