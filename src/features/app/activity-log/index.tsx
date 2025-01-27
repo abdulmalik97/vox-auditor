@@ -43,7 +43,11 @@ const ActivityLogView = () => {
         <Box sx={{ mb: 2 }}>
           <Typography variant="h5">Activity Log</Typography>
         </Box>
-        <Table rows={activityLogRecords} loading={tableLoading} columnsToExclude={["practiceId"]} />
+        <Table
+          rows={activityLogRecords}
+          loading={tableLoading}
+          columnsToExclude={["practiceId"]}
+        />
       </Box>
     </Container>
   );
