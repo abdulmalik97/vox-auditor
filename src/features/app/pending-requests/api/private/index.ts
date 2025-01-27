@@ -65,6 +65,31 @@ export class AppointmentOutboundRequestsPrivateApi {
     }
   }
 
+  static async getProvidersForOutboundRequests(practiceId: string) {
+    try {
+      const response = await fetch(
+        `${endpoint}/api/appointment/outbound/request/providers?practiceId=${practiceId}`,
+        {
+          headers: {
+            "Content-Type": "application/json",
+            "ngrok-skip-browser-warning": "69420", //to skip local browser warning using ngrok
+          },
+        }
+      );
+
+      if (!response.ok) {
+        console.log("Error getting providers");
+        return undefined;
+      }
+
+      const data = await response.json();
+      return data;
+    } catch (error) {
+      console.error("Error getting providers", error);
+      throw Error("Error getting providers");
+    }
+  }
+
   // static async confirmPrescriptionRequest(
   //   prescriptionRefillRequestId: string,
   //   notes: string

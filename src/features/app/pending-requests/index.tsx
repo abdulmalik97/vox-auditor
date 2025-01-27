@@ -13,6 +13,9 @@ const AppointmentOutboundRequestsView = () => {
   const { currentAccount } = useAccount();
 
   const [locations, setLocations] = useState<Record<string, any>>({});
+  const [providers, setProviders] = useState<{ id: string; name: string }[]>(
+    []
+  );
 
   useEffect(() => {
     if (currentAccount) {
@@ -46,6 +49,16 @@ const AppointmentOutboundRequestsView = () => {
           }));
           setAppointmentRequests(mappedRequests);
         }
+      });
+
+      AppointmentOutboundRequestsPrivateApi.getProvidersForOutboundRequests(
+        practiceId
+      ).then((providers) => {
+        const formattedProviders = providers.map((provider) => ({
+          id: provider.id,
+          name: `${provider.first_name} ${provider.last_name}`,
+        }));
+        setProviders(formattedProviders);
       });
     }
     if (currentAccount?.practice.locations) {
@@ -122,6 +135,7 @@ const AppointmentOutboundRequestsView = () => {
           onClose={handleCloseOutreachModal}
           onSubmit={handleOutreachSubmit}
           locations={locations}
+          providers={providers}
         />
         <Box display="flex" justifyContent="flex-end" mb={2}>
           <Button variant="contained" onClick={handleOpenOutreachModal}>

@@ -8,7 +8,7 @@ import {
   DialogContent,
   DialogTitle,
   FormHelperText,
-  Grid, //fix it later
+  Grid,
   CircularProgress,
   MenuItem,
 } from "@mui/material";
@@ -23,6 +23,7 @@ interface OutreachModalProps {
   onClose: () => void;
   onSubmit: (data: OutreachFormData) => Promise<void>;
   locations: Account["practice"]["locations"];
+  providers: Array<{ id: string; name: string }>;
 }
 
 interface OutreachFormData {
@@ -36,38 +37,12 @@ interface OutreachFormData {
   locationId: string;
 }
 
-interface CustomPhoneProps {
-  onChange: (event: { target: { name: string; value: string } }) => void;
-  name: string;
-}
-
-const formatPhoneNumber = (value: string) => {
-  const numbers = value.replace(/\D/g, "").slice(0, 10);
-  if (numbers.length === 0) return "";
-  if (numbers.length <= 3) return `(${numbers}`;
-  if (numbers.length <= 6)
-    return `(${numbers.slice(0, 3)}) ${numbers.slice(3)}`;
-  return `(${numbers.slice(0, 3)}) ${numbers.slice(3, 6)}-${numbers.slice(6)}`;
-};
-
-const PhoneInput = React.forwardRef<HTMLInputElement, CustomPhoneProps>(
-  function PhoneInput(props, ref) {
-    const { onChange, name, ...other } = props;
-
-    const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-      const formatted = formatPhoneNumber(event.target.value);
-      onChange({ target: { name, value: formatted } });
-    };
-
-    return <input {...other} onChange={handleChange} ref={ref} />;
-  }
-);
-
 const OutreachModal: React.FC<OutreachModalProps> = ({
   open,
   onClose,
   onSubmit,
   locations,
+  providers,
 }) => {
   const [formData, setFormData] = useState<OutreachFormData>({
     patientFirstName: "",
@@ -82,6 +57,7 @@ const OutreachModal: React.FC<OutreachModalProps> = ({
   const [errors, setErrors] = useState<Partial<OutreachFormData>>({});
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [selectedDate, setSelectedDate] = useState<dayjs.Dayjs | null>(null);
+
   const handleChange = (
     event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => {
@@ -90,6 +66,7 @@ const OutreachModal: React.FC<OutreachModalProps> = ({
       ...prev,
       [name]: value,
     }));
+
     // Clear error when user starts typing
     if (errors[name as keyof OutreachFormData]) {
       setErrors((prev) => ({
@@ -112,19 +89,17 @@ const OutreachModal: React.FC<OutreachModalProps> = ({
 
     if (!formData.patientPrimaryPhoneNumber.trim()) {
       newErrors.patientPrimaryPhoneNumber = "Primary phone number is required";
-    } else if (
-      formData.patientPrimaryPhoneNumber.replace(/\D/g, "").length !== 10
-    ) {
+    } else if (!formData.patientPrimaryPhoneNumber.match(/^\+1\d{10}$/)) {
       newErrors.patientPrimaryPhoneNumber =
-        "Please enter a valid 10-digit phone number";
+        "Please enter a valid phone number with country code";
     }
 
     if (
       formData.patientSecondaryPhoneNumber.trim() &&
-      formData.patientSecondaryPhoneNumber.replace(/\D/g, "").length !== 10
+      !formData.patientSecondaryPhoneNumber.match(/^\+1\d{10}$/)
     ) {
       newErrors.patientSecondaryPhoneNumber =
-        "Please enter a valid 10-digit phone number";
+        "Please enter a valid phone number with country code";
     }
 
     if (!formData.patientDob) {
@@ -160,6 +135,7 @@ const OutreachModal: React.FC<OutreachModalProps> = ({
         patientSecondaryPhoneNumber: "",
         patientDob: "",
         providerNameToSchedule: "",
+        locationId: "",
       });
       setSelectedDate(null);
       setErrors({});
@@ -266,13 +242,8 @@ const OutreachModal: React.FC<OutreachModalProps> = ({
                   fullWidth
                   required
                   size="medium"
-                  InputProps={{
-                    inputComponent: PhoneInput as any,
-                    inputProps: {
-                      type: "tel",
-                      placeholder: "(XXX) XXX-XXXX",
-                    },
-                  }}
+                  type="tel"
+                  placeholder="+1XXXXXXXXXX"
                   InputLabelProps={{
                     shrink: true,
                   }}
@@ -289,13 +260,8 @@ const OutreachModal: React.FC<OutreachModalProps> = ({
                   helperText={errors.patientSecondaryPhoneNumber}
                   fullWidth
                   size="medium"
-                  InputProps={{
-                    inputComponent: PhoneInput as any,
-                    inputProps: {
-                      type: "tel",
-                      placeholder: "(XXX) XXX-XXXX",
-                    },
-                  }}
+                  type="tel"
+                  placeholder="+1XXXXXXXXXX"
                   InputLabelProps={{
                     shrink: true,
                   }}
@@ -308,9 +274,8 @@ const OutreachModal: React.FC<OutreachModalProps> = ({
                   onChange={(newValue) => {
                     setSelectedDate(newValue);
                     if (newValue) {
-                      // Convert Dayjs to format string directly
+                      // Convert Dayjs to format string
                       const formattedDate = newValue.format("YYYY-MM-DD");
-
                       setFormData((prev) => ({
                         ...prev,
                         patientDob: formattedDate,
@@ -340,11 +305,11 @@ const OutreachModal: React.FC<OutreachModalProps> = ({
               </Grid>
               <Grid item xs={12} sm={6}>
                 <TextField
+                  select
                   name="providerNameToSchedule"
                   label="Provider Name"
                   value={formData.providerNameToSchedule}
                   onChange={handleChange}
-                  onKeyPress={handleKeyPress}
                   error={!!errors.providerNameToSchedule}
                   helperText={errors.providerNameToSchedule}
                   fullWidth
@@ -353,7 +318,13 @@ const OutreachModal: React.FC<OutreachModalProps> = ({
                   InputLabelProps={{
                     shrink: true,
                   }}
-                />
+                >
+                  {providers.map((provider) => (
+                    <MenuItem key={provider.id} value={provider.name}>
+                      {provider.name}
+                    </MenuItem>
+                  ))}
+                </TextField>
               </Grid>
 
               <Grid item xs={12} sm={6}>
