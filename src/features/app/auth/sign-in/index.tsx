@@ -110,7 +110,7 @@ const SignInPage = ({ signInAction }: SignPageProps) => {
             <TextField
               id="email"
               type="email"
-              label="Email"
+              label="Username"
               placeholder="your@email.com"
               autoComplete="email"
               autoFocus
