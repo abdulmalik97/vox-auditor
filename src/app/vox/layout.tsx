@@ -1,5 +1,4 @@
 import Layout from "@/components/layout";
-import { useAccount } from "@/contexts/account";
 import { createClient } from "@/utils/supabase/server";
 import { redirect } from "next/navigation";
 

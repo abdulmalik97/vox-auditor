@@ -12,7 +12,15 @@ import { AppointmentOutboundRequestsPrivateApi } from "./api/private";
 const AppointmentOutboundRequestsView = () => {
   const { currentAccount } = useAccount();
 
-  const [locations, setLocations] = useState<Record<string, any>>({});
+  const [locations, setLocations] = useState<
+    Record<
+      string,
+      {
+        providers: string[];
+        facilityName: string;
+      }
+    >
+  >({});
   const [providers, setProviders] = useState<{ id: string; name: string }[]>(
     []
   );
@@ -26,27 +34,30 @@ const AppointmentOutboundRequestsView = () => {
         practiceId
       ).then((requests) => {
         if (requests) {
-          const mappedRequests = requests.map((request: any) => ({
-            id: request.id,
-            practiceId: request.practice_id,
-            locationId: request.location_id,
-            patientFirstName: request.patient_first_name,
-            patientLastName: request.patient_last_name,
-            patientPrimaryPhoneNumber: request.patient_primary_phone_number,
-            patientSecondaryPhoneNumber: request.patient_secondary_phone_number,
-            patientDob: new Date(request.patient_dob).toLocaleDateString(
-              "en-US",
-              {
-                month: "2-digit",
-                day: "2-digit",
-                year: "numeric",
-              }
-            ),
-            status: request.status,
-            providerNameToSchedule: request.provider_name_to_schedule,
-            createdAt: request.created_at,
-            updatedAt: request.updated_at,
-          }));
+          const mappedRequests = requests.map(
+            (request: AppointmentOutboundCallRequest) => ({
+              id: request.id,
+              practiceId: request.practice_id,
+              locationId: request.location_id,
+              patientFirstName: request.patient_first_name,
+              patientLastName: request.patient_last_name,
+              patientPrimaryPhoneNumber: request.patient_primary_phone_number,
+              patientSecondaryPhoneNumber:
+                request.patient_secondary_phone_number,
+              patientDob: new Date(request.patient_dob).toLocaleDateString(
+                "en-US",
+                {
+                  month: "2-digit",
+                  day: "2-digit",
+                  year: "numeric",
+                }
+              ),
+              status: request.status,
+              providerNameToSchedule: request.provider_name_to_schedule,
+              createdAt: request.created_at,
+              updatedAt: request.updated_at,
+            })
+          );
           setAppointmentRequests(mappedRequests);
         }
       });
@@ -54,10 +65,16 @@ const AppointmentOutboundRequestsView = () => {
       AppointmentOutboundRequestsPrivateApi.getProvidersForOutboundRequests(
         practiceId
       ).then((providers) => {
-        const formattedProviders = providers.map((provider) => ({
-          id: provider.id,
-          name: `${provider.first_name} ${provider.last_name}`,
-        }));
+        const formattedProviders = providers.map(
+          (provider: {
+            id: string;
+            first_name: string;
+            last_name: string;
+          }) => ({
+            id: provider.id,
+            name: `${provider.first_name} ${provider.last_name}`,
+          })
+        );
         setProviders(formattedProviders);
       });
     }
@@ -93,7 +110,7 @@ const AppointmentOutboundRequestsView = () => {
     setOutreachModalOpen(false);
   };
 
-  const handleSubmit = async (notes: string) => {
+  const handleSubmit = async () => {
     if (appointmentRequest) {
       // await AppointmentOutboundRequestsPrivateApi.confirmAppointmentRequest(
       //   appointmentRequest.id,
@@ -103,7 +120,15 @@ const AppointmentOutboundRequestsView = () => {
     handleCloseModal();
   };
 
-  const handleOutreachSubmit = async (data: any) => {
+  const handleOutreachSubmit = async (data: {
+    locationId: string;
+    patientFirstName: string;
+    patientLastName: string;
+    patientDob: string;
+    patientPrimaryPhoneNumber: string;
+    patientSecondaryPhoneNumber?: string;
+    providerNameToSchedule: string;
+  }) => {
     const practiceId = currentAccount?.practice.practiceId;
     await AppointmentOutboundRequestsPrivateApi.saveAppointmentOutboundRequest({
       ...data,
@@ -163,6 +188,7 @@ const AppointmentOutboundRequestsView = () => {
             "createdAt",
             "updatedAt",
           ]}
+          loading={false}
           onRowClick={(appointmentRequest: AppointmentOutboundCallRequest) => {
             handleOpenModal(appointmentRequest);
           }}

@@ -19,7 +19,6 @@ interface AppointmentConfirmationModalProps {
 const AppointmentConfirmationModal = ({
   open,
   onClose,
-  onSubmit,
   providerNameToSchedule,
   patientFirstName,
   patientLastName,
@@ -28,11 +27,6 @@ const AppointmentConfirmationModal = ({
   patientSecondaryPhoneNumber,
   status,
 }: AppointmentConfirmationModalProps) => {
-  const handleSubmit = () => {
-    onSubmit("");
-    onClose();
-  };
-
   const InfoRow = ({ label, value }: { label: string; value?: string }) => (
     <Grid container spacing={2} sx={{ mb: 2 }}>
       <Grid item xs={4}>

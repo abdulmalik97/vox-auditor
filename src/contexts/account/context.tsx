@@ -49,10 +49,7 @@ const Context = createContext<AccountContext>({
   setAuthUser: () => undefined,
 });
 
-// eslint-disable-next-line @typescript-eslint/no-empty-interface
-interface PracticeContextDefinition {}
-
-type PracticeContextProps = PropsWithChildren<PracticeContextDefinition>;
+type PracticeContextProps = PropsWithChildren;
 
 /**
  * The context provider for the {@link Context} instance.
