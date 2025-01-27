@@ -35,7 +35,20 @@ const AppointmentOutboundRequestsView = () => {
       ).then((requests) => {
         if (requests) {
           const mappedRequests = requests.map(
-            (request: AppointmentOutboundCallRequest) => ({
+            (request: {
+              id: string;
+              practice_id: string;
+              location_id: string;
+              patient_first_name: string;
+              patient_last_name: string;
+              patient_primary_phone_number: string;
+              patient_secondary_phone_number?: string;
+              patient_dob: string;
+              status: string;
+              provider_name_to_schedule: string;
+              created_at: string;
+              updated_at: string;
+            }) => ({
               id: request.id,
               practiceId: request.practice_id,
               locationId: request.location_id,
@@ -130,11 +143,16 @@ const AppointmentOutboundRequestsView = () => {
     providerNameToSchedule: string;
   }) => {
     const practiceId = currentAccount?.practice.practiceId;
-    await AppointmentOutboundRequestsPrivateApi.saveAppointmentOutboundRequest({
-      ...data,
-      practiceId,
-    });
-    handleCloseOutreachModal();
+    if (practiceId) {
+      await AppointmentOutboundRequestsPrivateApi.saveAppointmentOutboundRequest(
+        {
+          ...data,
+          practiceId,
+        }
+      );
+
+      handleCloseOutreachModal();
+    }
   };
 
   return (

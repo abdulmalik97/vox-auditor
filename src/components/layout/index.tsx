@@ -1,4 +1,4 @@
-"use client"
+"use client";
 import { useAccount } from "@/contexts/account";
 import Sidebar from "./sidebar";
 import React, { useEffect } from "react";

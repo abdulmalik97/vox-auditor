@@ -1,5 +1,5 @@
 import { endpoint } from "@/constants";
-import { AppointmentOutboundCallRequest } from "../../model";
+// import { AppointmentOutboundCallRequest } from "../../model";
 // import { AppointmentOutboundCallRequest } from "../../model";
 
 export class AppointmentOutboundRequestsPrivateApi {
@@ -58,7 +58,7 @@ export class AppointmentOutboundRequestsPrivateApi {
 
       const data = await response.json();
 
-      return data as AppointmentOutboundCallRequest[];
+      return data;
     } catch (error) {
       console.error("Error getting prescription requests", error);
       throw Error("No prescription request data returned");
