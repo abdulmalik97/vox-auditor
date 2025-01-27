@@ -77,7 +77,7 @@ const Table = ({ rows, loading, title, columnsToExclude, onRowClick }: TableProp
         }}
         pageSizeOptions={[5, 10]}
         sx={{
-          cursor: 'pointer',
+          cursor: onRowClick ? 'pointer' : undefined,
           border: 0,
           "& .MuiDataGrid-cell:focus": {
             outline: "none", // Removes focus outline around cells
