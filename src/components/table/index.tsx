@@ -4,10 +4,12 @@ import * as React from "react";
 import { DataGrid, GridColDef } from "@mui/x-data-grid";
 import Paper from "@mui/material/Paper";
 import Typography from "@mui/material/Typography";
-import { Box } from "@mui/material";
+import { Box, CircularProgress } from "@mui/material";
 
 interface TableProps {
-  rows: any[]; // eslint-disable-line @typescript-eslint/no-explicit-any
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  rows: any[];
+  loading: boolean;
   columnOrder?: string[];
   columnsToExclude?: string[];
   title?: string;
@@ -50,6 +52,7 @@ const Table = ({
    * Generate a readable header name from a field key, if no custom label is provided.
    * e.g. "patientDob" -> "Patient Dob" or "patientDOB" -> "Patient DOB".
    */
+
   const generateHeader = (input: string): string => {
     return input
       .replace(/([a-z])([A-Z])/g, "$1 $2")
@@ -87,18 +90,25 @@ const Table = ({
 
   return (
     <Paper
-      sx={{
-        height: "95vh",
-        width: "100%",
-        borderRadius: 2,
-        overflow: "hidden",
-      }}
-    >
-      {title && (
-        <Box sx={{ p: 2 }}>
-          <Typography variant="h6">{title}</Typography>
-        </Box>
-      )}
+    sx={{
+      height: "95vh",
+      width: "100%",
+      borderRadius: 2,
+      overflow: "hidden",
+    }}
+  >
+    {title && (
+      <Box sx={{ p: 2 }}>
+        <Typography variant="h6">{title}</Typography>
+      </Box>
+    )}
+    
+    {/* Show loader when data is loading */}
+    {loading ? (
+      <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100%' }}>
+        <CircularProgress />
+      </Box>
+    ) : (
       <DataGrid
         rows={rows}
         columns={generateColumns()}
@@ -111,6 +121,7 @@ const Table = ({
         }}
         pageSizeOptions={[5, 10]}
         sx={{
+          cursor: onRowClick ? 'pointer' : undefined,
           border: 0,
           "& .MuiDataGrid-cell:focus": {
             outline: "none", // Removes focus outline around cells
@@ -123,7 +134,8 @@ const Table = ({
           onRowClick?.(param.row);
         }}
       />
-    </Paper>
+    )}
+  </Paper>
   );
 };
 

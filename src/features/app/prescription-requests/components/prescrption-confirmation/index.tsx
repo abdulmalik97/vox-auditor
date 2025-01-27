@@ -1,12 +1,19 @@
 "use client";
 
 import * as React from "react";
-import { Modal, Box, Button, TextField, Typography } from "@mui/material";
+import {
+  Modal,
+  Box,
+  Button,
+  TextField,
+  Typography,
+  CircularProgress,
+} from "@mui/material";
 
 interface PrescriptionConfirmationModalProps {
   open: boolean;
   onClose: () => void;
-  onSubmit: (notes: string) => void;
+  onSubmit: (notes: string) => Promise<void>;
   prescriptionName?: string;
   patientFirstName?: string;
   patientLastName?: string;
@@ -27,15 +34,19 @@ const PrescriptionConfirmationModal = ({
   status,
 }: PrescriptionConfirmationModalProps) => {
   const [notes, setNotes] = React.useState<string>("");
+  const [isConfirmingPrescription, setIsConfirmingPrescription] =
+    React.useState<boolean>(false);
 
   const handleNotesChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setNotes(event.target.value);
   };
 
-  const handleSubmit = () => {
-    onSubmit(notes);
+  const handleSubmit = async () => {
+    setIsConfirmingPrescription(true);
+    await onSubmit(notes);
     setNotes(""); // Clear the notes after submitting
     onClose(); // Close the modal
+    setIsConfirmingPrescription(false);
   };
 
   return (
@@ -90,13 +101,21 @@ const PrescriptionConfirmationModal = ({
         {/* Notes TextField */}
         <TextField
           label="Notes For Patient"
-          placeholder={"Any notes such as the pharmacy the the patient needs to pick the prescription at."}
+          placeholder={
+            "Any notes such as the pharmacy the patient needs to pick the prescription at."
+          }
           multiline
           rows={4}
           variant="outlined"
           fullWidth
           value={notes}
           onChange={handleNotesChange}
+          slotProps={{
+            htmlInput: {
+              maxLength: 100, // Set the character limit here
+            },
+          }}
+          helperText={`${notes.length}/100 characters`} // Display the current character count
           sx={{ marginBottom: 2 }}
         />
 
@@ -104,8 +123,18 @@ const PrescriptionConfirmationModal = ({
           <Button onClick={onClose} sx={{ marginRight: 1 }}>
             Cancel
           </Button>
-          <Button onClick={handleSubmit} variant="contained" color="primary" disabled={notes.trim() === ""}>
-            Confirm
+          <Button
+            onClick={handleSubmit}
+            variant="contained"
+            color="primary"
+            disabled={notes.trim() === "" || isConfirmingPrescription}
+            endIcon={
+              isConfirmingPrescription ? (
+                <CircularProgress size={24} color="inherit" />
+              ) : null
+            }
+          >
+            {isConfirmingPrescription ? "Submitting" : "Confirm"}
           </Button>
         </Box>
       </Box>

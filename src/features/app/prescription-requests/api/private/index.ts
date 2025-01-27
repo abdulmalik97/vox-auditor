@@ -2,8 +2,10 @@ import { endpoint } from "@/constants";
 import { PrescriptionRefillRequest } from "../../model";
 
 export class PrescriptionRequestsPrivateApi {
-  static async getPrescriptionRequests(practiceId: string) {
+
+  static async getPrescriptionRequests(practiceId: string, status?: string) {
     try {
+      console.log(status)
       const response = await fetch(
         `${endpoint}/api/prescription/refill/request?practiceId=${practiceId}`,
         {
@@ -12,6 +14,7 @@ export class PrescriptionRequestsPrivateApi {
             "ngrok-skip-browser-warning": "69420", //to skip local browser warning using ngrok
           },
         }
+
       );
 
       if (!response.ok) {
