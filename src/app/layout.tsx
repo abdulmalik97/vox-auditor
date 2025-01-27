@@ -5,6 +5,8 @@ import theme from "@/theme";
 import { AppRouterCacheProvider } from "@mui/material-nextjs/v15-appRouter";
 import { ThemeProvider } from "@mui/material/styles";
 import Header from "./Header";
+import Image from "next/image";
+import Link from "next/link";
 
 export default function RootLayout({
   children,
@@ -27,7 +29,7 @@ export default function RootLayout({
 }
 
 function MainLayout({ children }: { children: React.ReactNode }) {
-  const { currentAccount } = useAccount(); // or however you access user/session
+  const { currentAccount } = useAccount();
 
   return (
     <div
@@ -37,9 +39,29 @@ function MainLayout({ children }: { children: React.ReactNode }) {
         minHeight: "100vh",
       }}
     >
+      {/* Logo section */}
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          padding: "16px",
+        }}
+      >
+        <Link href="/">
+          <Image src="/assets/logo.png" width={250} height={60} alt="Logo" />
+        </Link>
+      </div>
+
       {/* Only render Header if user is logged in */}
       {currentAccount && <Header />}
-      <main style={{ flex: 1 }}>{children}</main>
+      <main
+        style={{
+          flex: 1,
+        }}
+      >
+        {children}
+      </main>
     </div>
   );
 }
