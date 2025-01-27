@@ -1,7 +1,12 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-import { Container, Box, Button } from "@mui/material";
+import {
+  Container,
+  Box,
+  Button,
+  Typography,
+} from "@mui/material";
 import AppointmentConfirmationModal from "./components/appointment-confirmation";
 import OutreachModal from "./components/outreach-modal";
 import { AppointmentOutboundCallRequest } from "./model";
@@ -11,6 +16,7 @@ import { AppointmentOutboundRequestsPrivateApi } from "./api/private";
 
 const AppointmentOutboundRequestsView = () => {
   const { currentAccount } = useAccount();
+  const [tableLoading, setTableLoading] = useState<boolean>(true);
 
   const [locations, setLocations] = useState<
     Record<
@@ -72,6 +78,7 @@ const AppointmentOutboundRequestsView = () => {
             })
           );
           setAppointmentRequests(mappedRequests);
+          setTableLoading(false);
         }
       });
 
@@ -180,10 +187,20 @@ const AppointmentOutboundRequestsView = () => {
           locations={locations}
           providers={providers}
         />
-        <Box display="flex" justifyContent="flex-end" mb={2}>
-          <Button variant="contained" onClick={handleOpenOutreachModal}>
-            Create Outreach
-          </Button>
+
+        <Box
+          display="flex"
+          justifyContent="space-between"
+          alignItems="center"
+          sx={{ mb: 2 }}
+        >
+          <Typography variant="h5">Pending Requests</Typography>
+
+          <Box display="flex" justifyContent="flex-end" mb={2}>
+            <Button variant="contained" onClick={handleOpenOutreachModal}>
+              Create Outreach
+            </Button>
+          </Box>
         </Box>
 
         <Table
@@ -206,7 +223,7 @@ const AppointmentOutboundRequestsView = () => {
             "createdAt",
             "updatedAt",
           ]}
-          loading={false}
+          loading={tableLoading}
           onRowClick={(appointmentRequest: AppointmentOutboundCallRequest) => {
             handleOpenModal(appointmentRequest);
           }}

@@ -1,17 +1,49 @@
+"use client";
+
 import Table from "@/components/table";
-import { Box, Container } from "@mui/material";
-import { ActivityLogEntry } from "./model";
+import { Box, Container, Typography } from "@mui/material";
+import { useAccount } from "@/contexts/account";
+import { useEffect, useState } from "react";
+import { ActivityLogPrivateApi, ActivityLogRecord } from "./api/private";
 
-interface ActivityLogViewProps {
-  activityLogEntries: ActivityLogEntry[];
-}
+const ActivityLogView = () => {
+  const { currentAccount } = useAccount();
+  const [tableLoading, setTableLoading] = useState<boolean>(true);
+  const [activityLogRecords, setActivityLogRecords] = useState<
+    ActivityLogRecord[]
+  >([]);
 
-const ActivityLogView = ({ activityLogEntries }: ActivityLogViewProps) => {
-  
+  useEffect(() => {
+    getPendingPrescriptionRefillRequests(async (requests) => {
+      setActivityLogRecords(requests);
+      setTableLoading(false);
+    });
+  }, [currentAccount]);
+
+  const getPendingPrescriptionRefillRequests = (
+    callback: (requests: ActivityLogRecord[]) => Promise<void>
+  ) => {
+    if (currentAccount) {
+      const practiceId = currentAccount.practice.practiceId;
+      ActivityLogPrivateApi.getActivityLog(practiceId).then(
+        async (requests) => {
+          if (requests) {
+            setTableLoading(true);
+            await callback(requests);
+            setTableLoading(false);
+          }
+        }
+      );
+    }
+  };
+
   return (
     <Container maxWidth={"xl"}>
       <Box>
-        <Table rows={activityLogEntries} title={"Activity Log"} />
+        <Box sx={{ mb: 2 }}>
+          <Typography variant="h5">Activity Log</Typography>
+        </Box>
+        <Table rows={activityLogRecords} loading={tableLoading} columnsToExclude={["practiceId"]} />
       </Box>
     </Container>
   );

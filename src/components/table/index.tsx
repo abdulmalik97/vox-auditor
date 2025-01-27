@@ -92,7 +92,7 @@ const Table = ({
   return (
     <Paper
       sx={{
-        height: "95vh",
+        height: "82vh",
         width: "100%",
         borderRadius: 2,
         overflow: "hidden",

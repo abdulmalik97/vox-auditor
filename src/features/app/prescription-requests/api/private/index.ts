@@ -5,9 +5,9 @@ export class PrescriptionRequestsPrivateApi {
 
   static async getPrescriptionRequests(practiceId: string, status?: string) {
     try {
-      console.log(status)
+
       const response = await fetch(
-        `${endpoint}/api/prescription/refill/request?practiceId=${practiceId}`,
+        `${endpoint}/api/prescription/refill/request?practiceId=${practiceId}&status=${status}`,
         {
           headers: {
             "Content-Type": "application/json",

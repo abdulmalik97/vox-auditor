@@ -5,7 +5,7 @@ const nextConfig: NextConfig = {
     return [
       {
         source: '/',
-        destination: '/vox/prescription-requests',
+        destination: '/vox/activity-log',
         permanent: false,
       },
     ];

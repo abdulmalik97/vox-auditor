@@ -84,12 +84,11 @@ const PrescriptionRequestsView = () => {
     _event: React.MouseEvent<HTMLElement>,
     newStatus: "Pending" | "Completed"
   ) => {
-    console.log("HERER");
     if (newStatus !== null) {
       setStatusFilter(newStatus);
 
       if (newStatus === "Pending") {
-        getPendingPrescriptionRefillRequests((requests) => {
+        getPendingPrescriptionRefillRequests(async (requests) => {
           setPrescriptionRefillRequests(requests);
         });
       } else if (newStatus === "Completed") {
