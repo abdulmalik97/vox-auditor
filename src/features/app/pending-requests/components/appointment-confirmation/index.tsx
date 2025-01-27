@@ -97,9 +97,9 @@ const AppointmentConfirmationModal = ({
           <Button onClick={onClose} variant="outlined" sx={{ mr: 2 }}>
             Cancel
           </Button>
-          <Button onClick={handleSubmit} variant="contained" color="primary">
+          {/* <Button onClick={handleSubmit} variant="contained" color="primary">
             Schedule Appointment Now
-          </Button>
+          </Button> */}
         </Box>
       </Box>
     </Modal>

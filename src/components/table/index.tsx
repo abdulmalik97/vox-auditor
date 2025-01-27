@@ -34,6 +34,7 @@ const Table = ({
   onRowClick,
   columnLabels,
   dateFields,
+  loading,
 }: TableProps) => {
   // If you prefer a library like moment or date-fns, you can integrate that as well:
   // import moment from 'moment';
@@ -90,52 +91,59 @@ const Table = ({
 
   return (
     <Paper
-    sx={{
-      height: "95vh",
-      width: "100%",
-      borderRadius: 2,
-      overflow: "hidden",
-    }}
-  >
-    {title && (
-      <Box sx={{ p: 2 }}>
-        <Typography variant="h6">{title}</Typography>
-      </Box>
-    )}
-    
-    {/* Show loader when data is loading */}
-    {loading ? (
-      <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100%' }}>
-        <CircularProgress />
-      </Box>
-    ) : (
-      <DataGrid
-        rows={rows}
-        columns={generateColumns()}
-        initialState={{
-          columns: {
-            columnVisibilityModel: {
-              id: false, // Hides the default "id" column if it exists
+      sx={{
+        height: "95vh",
+        width: "100%",
+        borderRadius: 2,
+        overflow: "hidden",
+      }}
+    >
+      {title && (
+        <Box sx={{ p: 2 }}>
+          <Typography variant="h6">{title}</Typography>
+        </Box>
+      )}
+
+      {/* Show loader when data is loading */}
+      {loading ? (
+        <Box
+          sx={{
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            height: "100%",
+          }}
+        >
+          <CircularProgress />
+        </Box>
+      ) : (
+        <DataGrid
+          rows={rows}
+          columns={generateColumns()}
+          initialState={{
+            columns: {
+              columnVisibilityModel: {
+                id: false, // Hides the default "id" column if it exists
+              },
             },
-          },
-        }}
-        pageSizeOptions={[5, 10]}
-        sx={{
-          cursor: onRowClick ? 'pointer' : undefined,
-          border: 0,
-          "& .MuiDataGrid-cell:focus": {
-            outline: "none", // Removes focus outline around cells
-          },
-          "& .MuiDataGrid-cell:focus-visible": {
-            outline: "none", // Removes focus outline when cell is focused
-          },
-        }}
-        onRowClick={(param) => {
-          onRowClick?.(param.row);
-        }}
-      />
-    )}
-  </Paper>
+          }}
+          pageSizeOptions={[5, 10]}
+          sx={{
+            cursor: onRowClick ? "pointer" : undefined,
+            border: 0,
+            "& .MuiDataGrid-cell:focus": {
+              outline: "none", // Removes focus outline around cells
+            },
+            "& .MuiDataGrid-cell:focus-visible": {
+              outline: "none", // Removes focus outline when cell is focused
+            },
+          }}
+          onRowClick={(param) => {
+            onRowClick?.(param.row);
+          }}
+        />
+      )}
+    </Paper>
   );
 };
 
