@@ -81,7 +81,8 @@ const Table = ({
         flex: 1,
         // Only apply a date formatter if this field is in the dateFields array:
         valueFormatter: dateFields?.includes(key)
-          ? (params) => formatDate(params.value)
+          ? (params: { value: string | undefined }) =>
+              params.value ? formatDate(params.value) : undefined
           : undefined,
       });
     }
