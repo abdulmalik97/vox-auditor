@@ -5,10 +5,14 @@ import AppBar from "@mui/material/AppBar";
 import Toolbar from "@mui/material/Toolbar";
 import Box from "@mui/material/Box";
 import MenuIcon from "@mui/icons-material/Menu";
-import NoteAltIcon from "@mui/icons-material/NoteAlt";
-import PersonIcon from '@mui/icons-material/Person';
-import CallIcon from '@mui/icons-material/Call';
+import TimelineIcon from '@mui/icons-material/Timeline';
+import MedicationIcon from '@mui/icons-material/Medication';
+import EventIcon from '@mui/icons-material/Event';
+import LogoutIcon from '@mui/icons-material/Logout';
 import Image from "next/image";
+import { useRouter } from "next/navigation";
+import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
+import { useAccount } from "@/contexts/account";
 import {
   CssBaseline,
   Divider,
@@ -29,8 +33,23 @@ interface SidebarProps {
 }
 
 const Sidebar = ({ children }: SidebarProps) => {
+  const router = useRouter();
+  const { setAuthUser, setAccount } = useAccount();
+  const supabase = createClientComponentClient();
   const [mobileOpen, setMobileOpen] = React.useState(false);
   const [isClosing, setIsClosing] = React.useState(false);
+
+  const handleLogout = async () => {
+    try {
+      await supabase.auth.signOut();
+      // @ts-expect-error because we know this is the correct type from the context
+      setAuthUser(undefined);
+      setAccount(undefined);
+      router.push("/auth/sign-in");
+    } catch (error) {
+      console.error("Error logging out:", error);
+    }
+  };
 
   const handleDrawerClose = () => {
     setIsClosing(true);
@@ -48,33 +67,41 @@ const Sidebar = ({ children }: SidebarProps) => {
   };
 
   const tabs = [
-    { text: "Activity Log", href: "/vox/activity-log", icon: <CallIcon /> },
+    { text: "Activity Log", href: "/dashboard/activity-log", icon: <TimelineIcon /> },
     {
       text: "Prescriptions",
-      href: "/vox/prescription-requests",
-      icon: <NoteAltIcon />,
+      href: "/dashboard/prescription-requests",
+      icon: <MedicationIcon />,
     },
     {
       text: "Schedule Appointment",
-      href: "/vox/pending-requests",
-      icon: <PersonIcon />,
+      href: "/dashboard/pending-requests",
+      icon: <EventIcon />,
     },
   ];
 
   const drawer = (
-    <div>
+    <Box sx={{ display: 'flex', flexDirection: 'column', height: '100%' }}>
       <Box
         mt={1}
-        p={2}
         sx={{
           display: "flex",
           justifyContent: "center",
           alignItems: "center",
-          flexGrow: 1,
         }}
       >
         <Link href={"/"}>
-          <Image src="/assets/logo.png" width={100} height={20} alt="Logo" />
+          <Image 
+            src="/assets/logo.png" 
+            width={75} 
+            height={75} 
+            alt="Voxology AI"
+            style={{
+              objectFit: 'contain',
+              maxWidth: '100%',
+              height: 'auto'
+            }}
+          />
         </Link>
       </Box>
       <Divider />
@@ -88,7 +115,19 @@ const Sidebar = ({ children }: SidebarProps) => {
           </ListItem>
         ))}
       </List>
-    </div>
+      <Box sx={{ flexGrow: 1 }} />
+      <Divider />
+      <List>
+        <ListItem disablePadding>
+          <ListItemButton onClick={handleLogout}>
+            <ListItemIcon>
+              <LogoutIcon />
+            </ListItemIcon>
+            <ListItemText primary="Logout" />
+          </ListItemButton>
+        </ListItem>
+      </List>
+    </Box>
   );
 
   return (
@@ -156,8 +195,11 @@ const Sidebar = ({ children }: SidebarProps) => {
         sx={{
           flexGrow: 1,
           p: 3,
-          marginTop: { xs: 5, sm: 0 },
+          margin: 2,
           width: { sm: `calc(100% - ${drawerWidth}px)` },
+          backgroundColor: 'white',
+          borderRadius: 2,
+          border: '0.5px solid #ccc',
         }}
       >
         {children}

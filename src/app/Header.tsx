@@ -44,7 +44,6 @@ export default function Header(props: HeaderProps) {
       <Toolbar
         sx={{
           justifyContent: props.isAuthed ? "flex-end" : "flex-start",
-          py: "0.87%",
         }}
       >
         {!props.isAuthed ? (

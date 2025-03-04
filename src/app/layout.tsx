@@ -1,10 +1,9 @@
 "use client";
 
-import { AccountProvider, useAccount } from "@/contexts/account";
+import { AccountProvider } from "@/contexts/account";
 import theme from "@/theme";
 import { AppRouterCacheProvider } from "@mui/material-nextjs/v15-appRouter";
 import { ThemeProvider } from "@mui/material/styles";
-import Header from "./Header";
 
 export default function RootLayout({
   children,
@@ -27,8 +26,6 @@ export default function RootLayout({
 }
 
 function MainLayout({ children }: { children: React.ReactNode }) {
-  const { currentAccount } = useAccount();
-
   return (
     <div
       style={{
@@ -37,8 +34,6 @@ function MainLayout({ children }: { children: React.ReactNode }) {
         minHeight: "100vh",
       }}
     >
-      {/* Only render Header if user is logged in */}
-      <Header isAuthed={currentAccount !== undefined} />
       <main style={{ flex: 1 }}>{children}</main>
     </div>
   );

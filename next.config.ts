@@ -5,7 +5,7 @@ const nextConfig: NextConfig = {
     return [
       {
         source: '/',
-        destination: '/vox/activity-log',
+        destination: '/dashboard/activity-log',
         permanent: false,
       },
     ];

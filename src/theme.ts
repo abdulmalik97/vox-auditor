@@ -19,37 +19,53 @@ const theme = responsiveFontSizes(
       },
     },
     palette: {
+      mode: 'light',
       primary: {
-        main: "#FFA500",
+        main: '#004c8b',
+        light: '#004a8b',
+        dark: '#004a87',
       },
       secondary: {
-        main: "#000000",
+        main: '#004a8b',
       },
       error: {
         main: "#ff0033",
       },
-
       background: {
-        default: "#F5F5F5",
+        default: '#ffffff',
+        paper: '#ffffff',
       },
+      text: {
+        primary: '#000000',
+        secondary: 'rgba(0, 0, 0, 0.7)',
+      }
     },
     components: {
       MuiLink: {
         styleOverrides: {
           root: {
-            textDecoration: "none", // Remove underline by default
+            textDecoration: "none",
+            color: '#004c8b',
             "&:hover": {
-              textDecoration: "none", // Underline on hover
+              color: '#004a87',
+              textDecoration: "underline",
             },
           },
         },
       },
-      MuiCheckbox: {
+      MuiTextField: {
         styleOverrides: {
           root: {
-            color: "#808080",
-            "&.Mui-checked": {
-              color: "#808080",
+            '& .MuiOutlinedInput-root': {
+              '& fieldset': {
+                borderColor: 'rgba(0, 0, 0, 0.23)',
+              },
+              '&:hover fieldset': {
+                borderColor: '#004a8b',
+              },
+              '&.Mui-focused fieldset': {
+                borderColor: '#004c8b',
+              },
             },
           },
         },
@@ -57,7 +73,16 @@ const theme = responsiveFontSizes(
       MuiButton: {
         styleOverrides: {
           root: {
-            color: "#000000",
+            borderRadius: 4,
+            textTransform: 'none',
+            fontWeight: 500,
+          },
+          contained: {
+            backgroundColor: '#004c8b',
+            color: '#ffffff',
+            '&:hover': {
+              backgroundColor: '#004a87',
+            },
           },
         },
       },

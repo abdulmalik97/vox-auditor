@@ -1,4 +1,5 @@
-import { endpoint } from "@/constants";
+import { bearer, endpoint } from "@/constants";
+import { EntraAuthApi } from "@/features/app/auth/api/private";
 
 export interface ActivityLogRecord {
   id: string;
@@ -15,12 +16,14 @@ export class ActivityLogPrivateApi {
    */
   static async getActivityLog(practiceId: string) {
     try {
+      // const token = await EntraAuthApi.getBearerToken("api://voxology-api/.default");
+      
       const response = await fetch(
         `${endpoint}/api/activity-log?practiceId=${practiceId}`,
         {
           headers: {
+            Authorization: `Bearer ${bearer}`,
             "Content-Type": "application/json",
-            "ngrok-skip-browser-warning": "69420", //to skip local browser warning using ngrok
           },
         }
       );

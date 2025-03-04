@@ -8,8 +8,8 @@ import TextField from "@mui/material/TextField";
 import Stack from "@mui/material/Stack";
 import MuiCard from "@mui/material/Card";
 import { styled } from "@mui/material/styles";
+import { CircularProgress, Typography, Link } from "@mui/material";
 import theme from "@/theme";
-import { CircularProgress, Typography } from "@mui/material";
 
 const Card = styled(MuiCard)(({ theme }) => ({
   display: "flex",
@@ -17,17 +17,12 @@ const Card = styled(MuiCard)(({ theme }) => ({
   alignSelf: "center",
   width: "100%",
   padding: theme.spacing(4),
-  gap: theme.spacing(2),
+  gap: theme.spacing(3),
   margin: "auto",
   [theme.breakpoints.up("sm")]: {
     maxWidth: "450px",
   },
-  boxShadow:
-    "hsla(220, 30%, 5%, 0.05) 0px 5px 15px 0px, hsla(220, 25%, 10%, 0.05) 0px 15px 35px -5px",
-  ...theme.applyStyles("dark", {
-    boxShadow:
-      "hsla(220, 30%, 5%, 0.5) 0px 5px 15px 0px, hsla(220, 25%, 10%, 0.08) 0px 15px 35px -5px",
-  }),
+  backgroundColor: theme.palette.background.paper,
 }));
 
 const SignInContainer = styled(Stack)(({ theme }) => ({
@@ -38,6 +33,13 @@ const SignInContainer = styled(Stack)(({ theme }) => ({
     padding: theme.spacing(4),
   },
   background: theme.palette.background.default,
+}));
+
+const ErrorMessage = styled(Typography)(({ theme }) => ({
+  color: theme.palette.error.main,
+  fontSize: "0.875rem",
+  marginTop: theme.spacing(1),
+  textAlign: "center",
 }));
 
 interface SignPageProps {
@@ -54,15 +56,13 @@ const SignInPage = ({ signInAction }: SignPageProps) => {
 
   const validateInputs = async (e: React.FormEvent) => {
     setIsSigningIn(true);
-    e.preventDefault(); // Prevent form submission
+    e.preventDefault();
 
     const email = (document.getElementById("email") as HTMLInputElement).value;
-    const password = (document.getElementById("password") as HTMLInputElement)
-      .value;
+    const password = (document.getElementById("password") as HTMLInputElement).value;
 
     let isValid = true;
 
-    // Email validation
     if (!email || !/\S+@\S+\.\S+/.test(email)) {
       setEmailError(true);
       setEmailErrorMessage("Please enter a valid email address.");
@@ -72,7 +72,6 @@ const SignInPage = ({ signInAction }: SignPageProps) => {
       setEmailErrorMessage("");
     }
 
-    // Password validation
     if (!password || password.length < 6) {
       setPasswordError(true);
       setPasswordErrorMessage("Password must be at least 6 characters.");
@@ -94,7 +93,16 @@ const SignInPage = ({ signInAction }: SignPageProps) => {
 
   return (
     <SignInContainer direction="column" justifyContent="center">
-      <Card variant="outlined">
+      <Card>
+        <Box sx={{ textAlign: "center", mb: 2 }}>
+          <Typography variant="h5" component="h1" gutterBottom>
+            Welcome Back
+          </Typography>
+          <Typography variant="body2" color="text.secondary">
+            Please sign in to continue
+          </Typography>
+        </Box>
+
         <Box
           component="form"
           onSubmit={validateInputs}
@@ -103,30 +111,22 @@ const SignInPage = ({ signInAction }: SignPageProps) => {
             display: "flex",
             flexDirection: "column",
             width: "100%",
-            gap: 2,
+            gap: 3,
           }}
         >
           <FormControl error={emailError} fullWidth>
             <TextField
               id="email"
               type="email"
-              label="Username"
+              label="Email Address"
               placeholder="your@email.com"
               autoComplete="email"
               autoFocus
               required
-              variant="standard"
-              color={"secondary"}
+              variant="outlined"
               helperText={emailErrorMessage}
               error={emailError}
               onChange={() => setSignInError("")}
-              slotProps={{
-                inputLabel: {
-                  style: {
-                    color: theme.palette.secondary.main, // Set label color here
-                  },
-                },
-              }}
             />
           </FormControl>
 
@@ -135,38 +135,53 @@ const SignInPage = ({ signInAction }: SignPageProps) => {
               id="password"
               type="password"
               label="Password"
-              placeholder="Voxology123"
+              placeholder="Enter your password"
               required
-              variant="standard"
-              color="secondary" // The color for the input itself
+              variant="outlined"
               helperText={passwordErrorMessage}
               error={passwordError}
               onChange={() => setSignInError("")}
-              slotProps={{
-                inputLabel: {
-                  style: {
-                    color: theme.palette.secondary.main, // Set label color here
-                  },
-                },
-              }}
             />
           </FormControl>
 
-          <Typography>{signInError}</Typography>
+          <Box sx={{ display: "flex", justifyContent: "flex-end" }}>
+            <Link
+              href="#"
+              underline="hover"
+              variant="body2"
+            >
+              Forgot password?
+            </Link>
+          </Box>
+
+          {signInError && <ErrorMessage>{signInError}</ErrorMessage>}
 
           <Button
             type="submit"
             fullWidth
             variant="contained"
-            sx={{ marginTop: theme.spacing(2), position: "relative" }}
+            sx={{
+              marginTop: theme.spacing(2),
+              position: "relative",
+              height: 48,
+            }}
             disabled={isSigningIn}
-            endIcon={
-              isSigningIn ? (
-                <CircularProgress size={24} color="inherit" />
-              ) : null
-            }
           >
-            {isSigningIn ? "Signing In" : "Sign In"}
+            {isSigningIn ? (
+              <>
+                Signing In
+                <CircularProgress
+                  size={24}
+                  sx={{
+                    position: "absolute",
+                    right: theme.spacing(2),
+                  }}
+                  color="inherit"
+                />
+              </>
+            ) : (
+              "Sign In"
+            )}
           </Button>
         </Box>
       </Card>

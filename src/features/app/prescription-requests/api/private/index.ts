@@ -1,20 +1,17 @@
-import { endpoint } from "@/constants";
+import { bearer, endpoint } from "@/constants";
 import { PrescriptionRefillRequest } from "../../model";
 
 export class PrescriptionRequestsPrivateApi {
-
   static async getPrescriptionRequests(practiceId: string, status?: string) {
     try {
-
       const response = await fetch(
         `${endpoint}/api/prescription/refill/request?practiceId=${practiceId}&status=${status}`,
         {
           headers: {
+            Authorization: `Bearer ${bearer}`,
             "Content-Type": "application/json",
-            "ngrok-skip-browser-warning": "69420", //to skip local browser warning using ngrok
           },
         }
-
       );
 
       if (!response.ok) {
@@ -41,6 +38,7 @@ export class PrescriptionRequestsPrivateApi {
         {
           method: "POST",
           headers: {
+            Authorization: `Bearer ${bearer}`,
             "Content-Type": "application/json",
           },
           body: JSON.stringify({

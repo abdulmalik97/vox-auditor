@@ -1,4 +1,4 @@
-import { endpoint } from "@/constants";
+import { bearer, endpoint } from "@/constants";
 import { Account } from "@/contexts/account/context";
 
 export class AccountApi {
@@ -9,8 +9,8 @@ export class AccountApi {
         {
           method: "GET",
           headers: {
+            Authorization: `Bearer ${bearer}`,
             "Content-Type": "application/json",
-            "ngrok-skip-browser-warning": "69420", //to skip local browser warning using ngrok
           },
         }
       );
