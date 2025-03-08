@@ -22,7 +22,6 @@ import RefreshIcon from '@mui/icons-material/Refresh';
 import MedicationIcon from '@mui/icons-material/Medication';
 
 const PRESCRIPTION_PENDING_STATUS = "Pending";
-const PRESCRIPTION_COMPLETED_STATUS = "Completed";
 
 const PrescriptionRequestsView = () => {
   const { currentAccount } = useAccount();

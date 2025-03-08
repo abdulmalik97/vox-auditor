@@ -7,7 +7,6 @@ import ProviderPicker from "./components/providers";
 import { Providers, Schedule } from "./model";
 import { BookAppointmentPrivateApi } from "./api";
 import ProviderSchedule from "./components/schedule";
-import Image from "next/image";
 import AppointmentConfirmationPage from "./components/pages/appointment-confirmation";
 import AppointmentInformationPage from "./components/pages/appointment-information";
 import { getFirstAvailableDate } from "./utils";
@@ -42,7 +41,6 @@ const BookAppointmentView = () => {
   const practiceId = searchParams.get("practiceId") ?? "";
   const [appointmentInformation, setAppointmentInformation] = useState<AppointmentInformation>({});
   const [currentStep, setCurrentStep] = useState(1);
-  const [loading, setLoading] = useState(true);
 
   const updateAppointmentInformation = (updates: Partial<AppointmentInformation>) => {
     setAppointmentInformation((prev) => ({
@@ -64,7 +62,6 @@ const BookAppointmentView = () => {
   useEffect(() => {
     const loadInitialData = async () => {
       try {
-        setLoading(true);
         const providers = await BookAppointmentPrivateApi.getProviders(practiceId);
         if (providers) {
           updateAppointmentInformation({
@@ -84,8 +81,6 @@ const BookAppointmentView = () => {
         }
       } catch (error) {
         console.error('Error loading appointment data:', error);
-      } finally {
-        setLoading(false);
       }
     };
 

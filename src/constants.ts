@@ -4,9 +4,6 @@ import dotenv from 'dotenv';
 // Load the environment variables
 dotenv.config();
 
-// Read the environment variable and provide a default value
-const environment = process.env.NODE_ENV
-
 export const AZURE_CLIENT_ID = process.env.NEXT_PUBLIC_AZURE_CLIENT_ID
 export const AZURE_CLIENT_SECRET = process.env.NEXT_PUBLIC_AZURE_CLIENT_SECRET
 export const AZURE_TENANT_ID = process.env.NEXT_PUBLIC_AZURE_TENANT_ID
