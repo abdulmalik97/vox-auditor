@@ -24,7 +24,7 @@ const STEPS = [
 export interface AppointmentInformation {
   providers?: Providers;
   schedule?: Schedule;
-  actorId?: string;
+  providerId?: string;
   date?: string;
   time?: string;
   patientFirstName?: string;
@@ -39,8 +39,12 @@ export interface AppointmentInformation {
 const BookAppointmentView = () => {
   const searchParams = useSearchParams();
   const practiceId = searchParams.get("practiceId") ?? "";
+  const expiryKey = searchParams.get("expiryKey") ?? "";
+  const [isUrlValid, setIsUrlValid] = useState<boolean>();
   const [appointmentInformation, setAppointmentInformation] = useState<AppointmentInformation>({});
   const [currentStep, setCurrentStep] = useState(1);
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
   const updateAppointmentInformation = (updates: Partial<AppointmentInformation>) => {
     setAppointmentInformation((prev) => ({
@@ -59,18 +63,34 @@ const BookAppointmentView = () => {
     });
   };
 
+  const bookAppointment = async () => {
+    setIsLoading(true);
+    setError(null);
+    try {
+      await BookAppointmentPrivateApi.bookAppointment(appointmentInformation);
+      await BookAppointmentPrivateApi.deactivateUrl(expiryKey);
+      setCurrentStep(4);
+    } catch (error) {
+      setError("Failed to book appointment. Please try again.");
+      console.error('Error booking appointment:', error);
+    } finally {
+      setIsLoading(false);
+    }
+  }
+
   useEffect(() => {
+
     const loadInitialData = async () => {
       try {
         const providers = await BookAppointmentPrivateApi.getProviders(practiceId);
         if (providers) {
           updateAppointmentInformation({
             providers: providers,
-            actorId: Object.keys(providers)[0],
+            providerId: Object.keys(providers)[0],
           });
 
           const schedule = await BookAppointmentPrivateApi.getSchedule(
-            providers[Object.keys(providers)[0]].providerIds
+            Object.keys(providers)[0]
           );
           if (schedule) {
             updateAppointmentInformation({
@@ -84,8 +104,20 @@ const BookAppointmentView = () => {
       }
     };
 
-    loadInitialData();
-  }, [practiceId]);
+    if (!expiryKey) {
+      setIsUrlValid(false);
+    } else if (expiryKey) {
+      BookAppointmentPrivateApi.verifyUrl(expiryKey).then((isUrlValid) => {
+        if (isUrlValid) {
+          loadInitialData();
+        }
+        else {
+          setIsUrlValid(false);
+        }
+      });
+    }
+
+  }, [practiceId, expiryKey]);
 
   const disableNext = () => {
     if (currentStep === 1 && (!appointmentInformation.date || !appointmentInformation.time)) {
@@ -113,7 +145,7 @@ const BookAppointmentView = () => {
       <Container maxWidth="md">
         <Paper elevation={0} sx={{ p: 3, mt: 2 }}>
           <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: '60vh' }}>
-            <Typography color="text.secondary">Loading appointment details...</Typography>
+            <Typography color="text.secondary"> {isUrlValid || isUrlValid === undefined ? "Loading appointment details..." : "This URL has expired."} </Typography>
           </Box>
         </Paper>
       </Container>
@@ -125,9 +157,9 @@ const BookAppointmentView = () => {
       <Paper elevation={0} sx={{ p: 3, mt: 2 }}>
         <Stack spacing={3}>
           {/* Header Section */}
-          <Box sx={{ 
-            display: 'flex', 
-            justifyContent: 'space-between', 
+          <Box sx={{
+            display: 'flex',
+            justifyContent: 'space-between',
             alignItems: 'center',
             borderBottom: '1px solid',
             borderColor: 'divider',
@@ -192,9 +224,16 @@ const BookAppointmentView = () => {
             )}
 
             {currentStep === 3 && (
-              <AppointmentConfirmationPage
-                appointmentInformation={appointmentInformation}
-              />
+              <>
+                <AppointmentConfirmationPage
+                  appointmentInformation={appointmentInformation}
+                />
+                {error && (
+                  <Box sx={{ mt: 2, textAlign: 'center' }}>
+                    <Typography color="error">{error}</Typography>
+                  </Box>
+                )}
+              </>
             )}
 
             {currentStep === 4 && (
@@ -205,8 +244,8 @@ const BookAppointmentView = () => {
           </Box>
 
           {/* Navigation Buttons */}
-          <Box sx={{ 
-            display: 'flex', 
+          <Box sx={{
+            display: 'flex',
             justifyContent: 'space-between',
             pt: 2,
             borderTop: '1px solid',
@@ -220,13 +259,24 @@ const BookAppointmentView = () => {
               Previous
             </Button>
 
-            <Button
-              variant="contained"
-              disabled={disableNext()}
-              onClick={() => setCurrentStep(currentStep + 1)}
+
+            {currentStep === 3 ? (
+              <Button
+                variant="contained"
+                disabled={disableNext() || isLoading}
+                onClick={async () => await bookAppointment()}
+              >
+                {isLoading ? "Booking..." : "Confirm Appointment"}
+              </Button>
+            ) : (
+              <Button
+                variant="contained"
+                disabled={disableNext()}
+                onClick={() => setCurrentStep(currentStep + 1)}
             >
-              {currentStep === 3 ? "Confirm Appointment" : "Next"}
-            </Button>
+                {"Next"}
+              </Button>
+            )}
           </Box>
         </Stack>
       </Paper>

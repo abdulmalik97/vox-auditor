@@ -9,20 +9,20 @@ const AppointmentDetails = ({
   appointmentInformation,
 }: AppointmentDetailsProps) => {
   const getProviderName = () => {
-    if (appointmentInformation.providers && appointmentInformation.actorId) {
+    if (appointmentInformation.providers && appointmentInformation.providerId) {
       return (
-        appointmentInformation.providers[appointmentInformation.actorId]
+        appointmentInformation.providers[appointmentInformation.providerId]
           .providerFirstName +
         " " +
-        appointmentInformation.providers[appointmentInformation.actorId]
+        appointmentInformation.providers[appointmentInformation.providerId]
           .providerLastName
       );
     }
   };
 
   const getProviderSpeciality = () => {
-    if (appointmentInformation.providers && appointmentInformation.actorId) {
-      return appointmentInformation.providers[appointmentInformation.actorId]
+    if (appointmentInformation.providers && appointmentInformation.providerId) {
+      return appointmentInformation.providers[appointmentInformation.providerId]
         .providerSpeciality;
     }
   };

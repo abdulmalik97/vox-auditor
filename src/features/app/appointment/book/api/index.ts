@@ -2,6 +2,7 @@
 import { EntraAuthApi } from "@/utils/ms_auth";
 import { PartialBookAppointmentPayload, Providers, Schedule } from "../model";
 import { AZURE_CLIENT_ID, SERVER_ENDPOINT } from "@/constants";
+import { AppointmentInformation } from "..";
 
 export class BookAppointmentPrivateApi {
   static async getProviders(practiceId: string) {
@@ -32,12 +33,12 @@ export class BookAppointmentPrivateApi {
     }
   }
 
-  static async getSchedule(providerIds: string[]) {
+  static async getSchedule(providerId: string) {
     try {
       const token = await EntraAuthApi.getBearerToken(`api://${AZURE_CLIENT_ID}`);
 
       const response = await fetch(
-        `${SERVER_ENDPOINT}/api/schedule?providerIds=${providerIds.join(",")}`,
+        `${SERVER_ENDPOINT}/api/schedule?providerId=${providerId}`,
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -60,19 +61,84 @@ export class BookAppointmentPrivateApi {
     }
   }
 
+  static async verifyUrl(expiryKey: string) {
+    try {
+      const token = await EntraAuthApi.getBearerToken(`api://${AZURE_CLIENT_ID}`);
+
+      const response = await fetch(
+        `${SERVER_ENDPOINT}/api/appointment/url/verify`,
+        {
+          method: "POST",
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ expiryKey }),
+        }
+      );
+
+      if (!response.ok) {
+        console.log("Error verifying url.");
+        return undefined;
+      }
+
+      const data = await response.json() as { isUrlValid: boolean };
+
+      return data.isUrlValid;
+    } catch (error) {
+      console.error("Error verifying url", error);
+      throw Error("No url data returned.");
+    }
+  }
+
+  static async deactivateUrl(expiryKey: string) {
+    try {
+      const token = await EntraAuthApi.getBearerToken(`api://${AZURE_CLIENT_ID}`);
+
+      const response = await fetch(
+        `${SERVER_ENDPOINT}/api/appointment/url/deactivate`,
+        {
+          method: "POST",
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ expiryKey }),
+        }
+      );
+
+      if (!response.ok) {
+        console.log("Error deactivating url.");
+        throw new Error("Error deactivating url.");
+      }
+    } catch (error) {
+      console.error("Error deactivating url", error);
+      throw Error("Error deactivating url.");
+    }
+  }
+
   static async bookAppointment(
-    bookAppointmentPayload: PartialBookAppointmentPayload
+    appointmentInformation: AppointmentInformation
   ) {
     try {
       const token = await EntraAuthApi.getBearerToken(`api://${AZURE_CLIENT_ID}`);
 
-      const response = await fetch(`${SERVER_ENDPOINT}/api/appointment`, {
+      const partialBookAppointmentPayload: PartialBookAppointmentPayload = {
+        providerId: appointmentInformation.providerId,
+        appointmentDateTime: appointmentInformation.date + " " + appointmentInformation.time,
+        patientFirstName: appointmentInformation.patientFirstName,
+        patientLastName: appointmentInformation.patientLastName,
+        patientPhoneNumber: appointmentInformation.patientPhoneNumber,
+        patientBirthdate: appointmentInformation.patientBirthdate,
+      }
+
+      const response = await fetch(`${SERVER_ENDPOINT}/api/appointment/booking`, {
         method: "POST",
         headers: {
           Authorization: `Bearer ${token}`,
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(bookAppointmentPayload),
+        body: JSON.stringify(partialBookAppointmentPayload),
       });
 
       if (response.status === 400) {

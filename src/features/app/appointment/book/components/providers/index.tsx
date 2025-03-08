@@ -16,12 +16,12 @@ const ProviderPicker = ({
   clearAppointmentInformation,
   updateAppointmentInformation,
 }: ProviderPickerProps) => {
-  const onProviderSelect = (actorId: string) => {
+  const onProviderSelect = (providerId: string) => {
     if (appointmentInformation.providers) {
       BookAppointmentPrivateApi.getSchedule(
-        appointmentInformation.providers[actorId].providerIds
+        providerId
       ).then((schedule) => {
-        updateAppointmentInformation({ actorId: actorId });
+        updateAppointmentInformation({ providerId: providerId });
         if (schedule) {
           clearAppointmentInformation(schedule);
         }
@@ -29,7 +29,7 @@ const ProviderPicker = ({
     }
   };
 
-  const actorId = appointmentInformation.actorId;
+  const providerId = appointmentInformation.providerId;
   const providers = appointmentInformation.providers;
 
   if (!providers) {
@@ -42,7 +42,7 @@ const ProviderPicker = ({
       <Select
         labelId="provider-label"
         label="Provider"
-        value={actorId ? actorId : Object.keys(providers)[0]}
+        value={providerId ? providerId : Object.keys(providers)[0]}
         onChange={(e) => onProviderSelect(e.target.value)}
       >
         {Object.keys(providers).map((key) => (

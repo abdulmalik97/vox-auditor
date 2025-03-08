@@ -2,11 +2,10 @@ export interface Provider {
   providerFirstName: string;
   providerLastName: string;
   providerSpeciality: string;
-  providerIds: string[];
 }
 
 export interface Providers {
-  [actorId: string]: Provider;
+  [providerId: string]: Provider;
 }
 
 export interface Schedule {
