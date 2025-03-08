@@ -1,3 +1,4 @@
+import { AZURE_TENANT_ID, AZURE_CLIENT_ID, AZURE_CLIENT_SECRET, BEARER_TOKEN, ENV } from "@/constants";
 import { ClientSecretCredential } from "@azure/identity";
 import { AccessToken } from "@azure/identity";
 
@@ -7,9 +8,10 @@ export class EntraAuthApi {
 
   private static getCredential() {
     if (!this.credential) {
-      const tenantId = process.env.AZURE_TENANT_ID;
-      const clientId = process.env.AZURE_CLIENT_ID;
-      const clientSecret = process.env.AZURE_CLIENT_SECRET;
+      
+      const tenantId = AZURE_TENANT_ID;
+      const clientId = AZURE_CLIENT_ID;
+      const clientSecret = AZURE_CLIENT_SECRET;
 
       if (!tenantId || !clientId || !clientSecret) {
         throw new Error("Missing required Azure credentials in environment variables");
@@ -31,6 +33,11 @@ export class EntraAuthApi {
    */
   static async getBearerToken(scope: string): Promise<string> {
     try {
+
+      if (ENV === 'local') {
+        return BEARER_TOKEN;
+      }
+
       // Check if we have a cached token that's still valid (with 5 minute buffer)
       if (this.cachedToken && this.cachedToken.expiresOnTimestamp > Date.now() + 300000) {
         return this.cachedToken.token;

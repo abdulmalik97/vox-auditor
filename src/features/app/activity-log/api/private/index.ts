@@ -1,5 +1,5 @@
-import { bearer, endpoint } from "@/constants";
-import { EntraAuthApi } from "@/features/app/auth/api/private";
+import { AZURE_CLIENT_ID, SERVER_ENDPOINT } from "@/constants";
+import { EntraAuthApi } from "@/utils/ms_auth";
 
 export interface ActivityLogRecord {
   id: string;
@@ -16,13 +16,14 @@ export class ActivityLogPrivateApi {
    */
   static async getActivityLog(practiceId: string) {
     try {
-      // const token = await EntraAuthApi.getBearerToken("api://voxology-api/.default");
+
+      const token = await EntraAuthApi.getBearerToken(`api://${AZURE_CLIENT_ID}`);
       
       const response = await fetch(
-        `${endpoint}/api/activity-log?practiceId=${practiceId}`,
+        `${SERVER_ENDPOINT}/api/activity-log?practiceId=${practiceId}`,
         {
           headers: {
-            Authorization: `Bearer ${bearer}`,
+            Authorization: `Bearer ${token}`,
             "Content-Type": "application/json",
           },
         }

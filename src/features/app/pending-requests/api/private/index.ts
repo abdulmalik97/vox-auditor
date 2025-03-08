@@ -1,4 +1,5 @@
-import { endpoint } from "@/constants";
+import { AZURE_CLIENT_ID, SERVER_ENDPOINT } from "@/constants"; 
+import { EntraAuthApi } from "@/utils/ms_auth";
 
 export class AppointmentOutboundRequestsPrivateApi {
   static async saveAppointmentOutboundRequest(data: {
@@ -11,11 +12,14 @@ export class AppointmentOutboundRequestsPrivateApi {
     providerNameToSchedule: string;
   }) {
     try {
+      const token = await EntraAuthApi.getBearerToken(`api://${AZURE_CLIENT_ID}`);
+
       const response = await fetch(
-        `${endpoint}/api/appointment/outbound/create`,
+        `${SERVER_ENDPOINT}/api/appointment/outbound/create`,
         {
           method: "POST",
           headers: {
+            Authorization: `Bearer ${token}`,
             "Content-Type": "application/json",
           },
           body: JSON.stringify(data),
@@ -37,10 +41,13 @@ export class AppointmentOutboundRequestsPrivateApi {
 
   static async getAppointmentOutboundRequests(practiceId: string) {
     try {
+      const token = await EntraAuthApi.getBearerToken(`api://${AZURE_CLIENT_ID}`);
+
       const response = await fetch(
-        `${endpoint}/api/appointment/outbound/request?practiceId=${practiceId}`,
+        `${SERVER_ENDPOINT}/api/appointment/outbound/request?practiceId=${practiceId}`,
         {
           headers: {
+            Authorization: `Bearer ${token}`,
             "Content-Type": "application/json",
           },
         }
@@ -62,10 +69,13 @@ export class AppointmentOutboundRequestsPrivateApi {
 
   static async getProvidersForOutboundRequests(practiceId: string) {
     try {
+      const token = await EntraAuthApi.getBearerToken(`api://${AZURE_CLIENT_ID}`);
+
       const response = await fetch(
-        `${endpoint}/api/appointment/outbound/request/providers?practiceId=${practiceId}`,
+        `${SERVER_ENDPOINT}/api/appointment/outbound/request/providers?practiceId=${practiceId}`,
         {
           headers: {
+            Authorization: `Bearer ${token}`,
             "Content-Type": "application/json",
           },
         }

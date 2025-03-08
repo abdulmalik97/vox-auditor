@@ -7,10 +7,11 @@ dotenv.config();
 // Read the environment variable and provide a default value
 const environment = process.env.NODE_ENV
 
+export const AZURE_CLIENT_ID = process.env.NEXT_PUBLIC_AZURE_CLIENT_ID
+export const AZURE_CLIENT_SECRET = process.env.NEXT_PUBLIC_AZURE_CLIENT_SECRET
+export const AZURE_TENANT_ID = process.env.NEXT_PUBLIC_AZURE_TENANT_ID
 
-const devEndpoint = 'http://localhost:7071';
-const prodEndpoint = 'https://voxology-functions-prod.azurewebsites.net';
-export const bearer = "***REMOVED***"
+export const BEARER_TOKEN = process.env.NEXT_PUBLIC_BEARER_TOKEN || ''
 
-// Use the environment to set the endpoint
-export const endpoint = environment === 'production' ? prodEndpoint : devEndpoint;
+export const ENV = process.env.NEXT_PUBLIC_ENV
+export const SERVER_ENDPOINT = process.env.NEXT_PUBLIC_SERVER_ENDPOINT

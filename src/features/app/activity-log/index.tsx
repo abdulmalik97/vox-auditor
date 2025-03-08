@@ -7,12 +7,34 @@ import { useEffect, useState } from "react";
 import { ActivityLogPrivateApi, ActivityLogRecord } from "./api/private";
 import RefreshIcon from '@mui/icons-material/Refresh';
 import TimelineIcon from '@mui/icons-material/Timeline';
+import { GridColDef } from "@mui/x-data-grid";
 
 const ActivityLogView = () => {
   const { currentAccount } = useAccount();
   const [tableLoading, setTableLoading] = useState<boolean>(true);
   const [activityLogRecords, setActivityLogRecords] = useState<ActivityLogRecord[]>([]);
   const [error, setError] = useState<string | null>(null);
+
+  // Custom column definitions
+  const customColumns: GridColDef[] = [
+    {
+      field: 'reasonForCall',
+      headerName: 'Reason for Call',
+      flex: 1,
+      renderCell: (params) => (
+        <Tooltip title={params.value || ''} arrow>
+          <div style={{ 
+            overflow: 'hidden', 
+            textOverflow: 'ellipsis', 
+            whiteSpace: 'nowrap',
+            width: '100%'
+          }}>
+            {params.value}
+          </div>
+        </Tooltip>
+      ),
+    }
+  ];
 
   const loadActivityLog = async () => {
     if (!currentAccount) return;
@@ -22,7 +44,7 @@ const ActivityLogView = () => {
       setError(null);
       const practiceId = currentAccount.practice.practiceId;
       const requests = await ActivityLogPrivateApi.getActivityLog(practiceId);
-      setActivityLogRecords(requests || []);
+      setActivityLogRecords(requests || []);  
     } catch (err) {
       setError('Failed to load activity log. Please try again.');
       console.error('Error loading activity log:', err);
@@ -87,6 +109,7 @@ const ActivityLogView = () => {
               rows={activityLogRecords}
               loading={tableLoading}
               columnsToExclude={["practiceId"]}
+              customColumns={customColumns}
             />
           </Box>
         </Stack>

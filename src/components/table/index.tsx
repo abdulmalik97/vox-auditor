@@ -25,6 +25,11 @@ interface TableProps {
    * An optional list of fields that should be displayed in date format.
    */
   dateFields?: string[];
+
+  /**
+   * Custom column definitions that override the auto-generated ones
+   */
+  customColumns?: GridColDef[];
 }
 
 const Table = ({
@@ -35,6 +40,7 @@ const Table = ({
   columnLabels,
   dateFields,
   loading,
+  customColumns,
 }: TableProps) => {
   // If you prefer a library like moment or date-fns, you can integrate that as well:
   // import moment from 'moment';
@@ -70,7 +76,20 @@ const Table = ({
     const firstEntry = rows[0];
     const columns: GridColDef[] = [];
 
+    // First add any custom columns that are defined
+    if (customColumns) {
+      columns.push(...customColumns);
+    }
+
+    // Get the set of fields that already have custom columns
+    const customColumnFields = new Set(customColumns?.map(col => col.field) || []);
+
     for (const key of Object.keys(firstEntry)) {
+      // Skip if this field already has a custom column definition
+      if (customColumnFields.has(key)) {
+        continue;
+      }
+
       if (columnsToExclude?.includes(key)) {
         continue; // Skip excluded columns
       }

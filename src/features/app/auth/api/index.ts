@@ -1,15 +1,18 @@
-import { bearer, endpoint } from "@/constants";
+import { AZURE_CLIENT_ID, SERVER_ENDPOINT } from "@/constants";
 import { Account } from "@/contexts/account/context";
+import { EntraAuthApi } from "../../../../utils/ms_auth";
 
 export class AccountApi {
   static async getAccount(email: string) {
     try {
+      const token = await EntraAuthApi.getBearerToken(`api://${AZURE_CLIENT_ID}`);
+      
       const response = await fetch(
-        `${endpoint}/api/account?email=${encodeURIComponent(email)}`,
+        `${SERVER_ENDPOINT}/api/account?email=${encodeURIComponent(email)}`,
         {
           method: "GET",
           headers: {
-            Authorization: `Bearer ${bearer}`,
+            Authorization: `Bearer ${token}`,
             "Content-Type": "application/json",
           },
         }

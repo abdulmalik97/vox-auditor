@@ -1,14 +1,17 @@
-import { bearer, endpoint } from "@/constants";
+
+import { AZURE_CLIENT_ID, SERVER_ENDPOINT } from "@/constants";
+import { EntraAuthApi } from "@/utils/ms_auth";
 import { PrescriptionRefillRequest } from "../../model";
 
 export class PrescriptionRequestsPrivateApi {
   static async getPrescriptionRequests(practiceId: string, status?: string) {
     try {
+      const token = await EntraAuthApi.getBearerToken(`api://${AZURE_CLIENT_ID}`);
       const response = await fetch(
-        `${endpoint}/api/prescription/refill/request?practiceId=${practiceId}&status=${status}`,
+        `${SERVER_ENDPOINT}/api/prescription/refill/request?practiceId=${practiceId}&status=${status}`,
         {
           headers: {
-            Authorization: `Bearer ${bearer}`,
+            Authorization: `Bearer ${token}`,
             "Content-Type": "application/json",
           },
         }
@@ -33,12 +36,13 @@ export class PrescriptionRequestsPrivateApi {
     notes: string
   ) {
     try {
+      const token = await EntraAuthApi.getBearerToken(`api://${AZURE_CLIENT_ID}`);
       const response = await fetch(
-        `${endpoint}/api/prescription/refill/request/confirm`,
+        `${SERVER_ENDPOINT}/api/prescription/refill/request/confirm`,
         {
           method: "POST",
           headers: {
-            Authorization: `Bearer ${bearer}`,
+            Authorization: `Bearer ${token}`,
             "Content-Type": "application/json",
           },
           body: JSON.stringify({

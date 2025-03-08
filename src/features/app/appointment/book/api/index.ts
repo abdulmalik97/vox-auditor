@@ -1,13 +1,18 @@
-import { endpoint } from "@/constants";
+
+import { EntraAuthApi } from "@/utils/ms_auth";
 import { PartialBookAppointmentPayload, Providers, Schedule } from "../model";
+import { AZURE_CLIENT_ID, SERVER_ENDPOINT } from "@/constants";
 
 export class BookAppointmentPrivateApi {
   static async getProviders(practiceId: string) {
     try {
+      const token = await EntraAuthApi.getBearerToken(`api://${AZURE_CLIENT_ID}`);
+
       const response = await fetch(
-        `${endpoint}/api/provider?practiceId=${practiceId}`,
+        `${SERVER_ENDPOINT}/api/provider?practiceId=${practiceId}`,
         {
           headers: {
+            Authorization: `Bearer ${token}`,
             "Content-Type": "application/json",
           },
         }
@@ -29,10 +34,13 @@ export class BookAppointmentPrivateApi {
 
   static async getSchedule(providerIds: string[]) {
     try {
+      const token = await EntraAuthApi.getBearerToken(`api://${AZURE_CLIENT_ID}`);
+
       const response = await fetch(
-        `${endpoint}/api/schedule?providerIds=${providerIds.join(",")}`,
+        `${SERVER_ENDPOINT}/api/schedule?providerIds=${providerIds.join(",")}`,
         {
           headers: {
+            Authorization: `Bearer ${token}`,
             "Content-Type": "application/json",
           },
         }
@@ -56,9 +64,12 @@ export class BookAppointmentPrivateApi {
     bookAppointmentPayload: PartialBookAppointmentPayload
   ) {
     try {
-      const response = await fetch(`${endpoint}/api/appointment`, {
+      const token = await EntraAuthApi.getBearerToken(`api://${AZURE_CLIENT_ID}`);
+
+      const response = await fetch(`${SERVER_ENDPOINT}/api/appointment`, {
         method: "POST",
         headers: {
+          Authorization: `Bearer ${token}`,
           "Content-Type": "application/json",
         },
         body: JSON.stringify(bookAppointmentPayload),
