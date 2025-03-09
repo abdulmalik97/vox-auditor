@@ -8,8 +8,9 @@ import TextField from "@mui/material/TextField";
 import Stack from "@mui/material/Stack";
 import MuiCard from "@mui/material/Card";
 import { styled } from "@mui/material/styles";
-import { CircularProgress, Typography, Link } from "@mui/material";
+import { CircularProgress, Typography } from "@mui/material";
 import theme from "@/theme";
+import Image from "next/image";
 
 const Card = styled(MuiCard)(({ theme }) => ({
   display: "flex",
@@ -33,6 +34,7 @@ const SignInContainer = styled(Stack)(({ theme }) => ({
     padding: theme.spacing(4),
   },
   background: theme.palette.background.default,
+  position: "relative",
 }));
 
 const ErrorMessage = styled(Typography)(({ theme }) => ({
@@ -93,6 +95,15 @@ const SignInPage = ({ signInAction }: SignPageProps) => {
 
   return (
     <SignInContainer direction="column" justifyContent="center">
+      <Box sx={{ position: 'absolute', top: 12, left: 24 }}>
+        <Image
+          src="/assets/logo.png"
+          alt="Logo"
+          width={48}
+          height={48}
+          priority
+        />
+      </Box>
       <Card>
         <Box sx={{ textAlign: "center", mb: 2 }}>
           <Typography variant="h5" component="h1" gutterBottom>
@@ -144,7 +155,7 @@ const SignInPage = ({ signInAction }: SignPageProps) => {
             />
           </FormControl>
 
-          <Box sx={{ display: "flex", justifyContent: "flex-end" }}>
+          {/* <Box sx={{ display: "flex", justifyContent: "flex-end" }}>
             <Link
               href="#"
               underline="hover"
@@ -152,7 +163,7 @@ const SignInPage = ({ signInAction }: SignPageProps) => {
             >
               Forgot password?
             </Link>
-          </Box>
+          </Box> */}
 
           {signInError && <ErrorMessage>{signInError}</ErrorMessage>}
 
