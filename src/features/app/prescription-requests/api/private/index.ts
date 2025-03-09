@@ -1,12 +1,12 @@
 
-import { AZURE_CLIENT_ID, SERVER_ENDPOINT } from "@/constants";
+import { SERVER_ENDPOINT } from "@/constants";
 import { EntraAuthApi } from "@/utils/ms_auth";
 import { PrescriptionRefillRequest } from "../../model";
 
 export class PrescriptionRequestsPrivateApi {
   static async getPrescriptionRequests(practiceId: string, status?: string) {
     try {
-      const token = await EntraAuthApi.getBearerToken(`api://${AZURE_CLIENT_ID}`);
+      const token = await EntraAuthApi.getBearerToken();
       const response = await fetch(
         `${SERVER_ENDPOINT}/api/prescription/refill/request?practiceId=${practiceId}&status=${status}`,
         {
@@ -36,7 +36,7 @@ export class PrescriptionRequestsPrivateApi {
     notes: string
   ) {
     try {
-      const token = await EntraAuthApi.getBearerToken(`api://${AZURE_CLIENT_ID}`);
+      const token = await EntraAuthApi.getBearerToken();
       const response = await fetch(
         `${SERVER_ENDPOINT}/api/prescription/refill/request/confirm`,
         {

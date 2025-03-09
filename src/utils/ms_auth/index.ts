@@ -1,56 +1,40 @@
-import { AZURE_TENANT_ID, AZURE_CLIENT_ID, AZURE_CLIENT_SECRET, BEARER_TOKEN, ENV } from "@/constants";
-import { ClientSecretCredential } from "@azure/identity";
-import { AccessToken } from "@azure/identity";
+import { SERVER_ENDPOINT } from "@/constants";
 
 export class EntraAuthApi {
-  private static credential: ClientSecretCredential | null = null;
-  private static cachedToken: AccessToken | null = null;
-
-  private static getCredential() {
-    if (!this.credential) {
-      
-      const tenantId = AZURE_TENANT_ID;
-      const clientId = AZURE_CLIENT_ID;
-      const clientSecret = AZURE_CLIENT_SECRET;
-
-      if (!tenantId || !clientId || !clientSecret) {
-        throw new Error("Missing required Azure credentials in environment variables");
-      }
-
-      this.credential = new ClientSecretCredential(
-        tenantId,
-        clientId,
-        clientSecret
-      );
-    }
-    return this.credential;
-  }
+  private static cachedToken: string | null = null;
+  private static cachedTokenExpiry: number | null = null;
 
   /**
    * Gets a bearer token for the specified scope
    * @param scope The scope to request the token for (e.g. "https://management.azure.com/.default")
    * @returns The bearer token
    */
-  static async getBearerToken(scope: string): Promise<string> {
+  static async getBearerToken(): Promise<string> {
     try {
-
-      if (ENV === 'local') {
-        return BEARER_TOKEN;
-      }
-
       // Check if we have a cached token that's still valid (with 5 minute buffer)
-      if (this.cachedToken && this.cachedToken.expiresOnTimestamp > Date.now() + 300000) {
-        return this.cachedToken.token;
+      if (this.cachedToken && this.cachedTokenExpiry && this.cachedTokenExpiry > Date.now() + 300000) {
+        return this.cachedToken;
       }
 
-      // Get a new token
-      const credential = this.getCredential();
-      this.cachedToken = await credential.getToken(scope);
+      // Get a new token from the backend
+      const response = await fetch(`${SERVER_ENDPOINT}/api/token`);
+      if (!response.ok) {
+        throw new Error('Failed to fetch token from backend');
+      }
+
+      const data = await response.json();
+      if (!data.accessToken) {
+        throw new Error('No access token received from backend');
+      }
+
+      this.cachedToken = data.accessToken;
+      // Set expiry to 1 hour from now (typical token lifetime)
+      this.cachedTokenExpiry = Date.now() + 3600000;
       
-      return this.cachedToken.token;
+      return data.accessToken;
     } catch (error) {
       console.error("Error getting bearer token:", error);
-      throw new Error("Failed to get bearer token from MS Entra ID");
+      throw new Error("Failed to get bearer token from backend API");
     }
   }
 } 

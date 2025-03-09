@@ -1,4 +1,4 @@
-import { AZURE_CLIENT_ID, SERVER_ENDPOINT } from "@/constants"; 
+import { SERVER_ENDPOINT } from "@/constants"; 
 import { EntraAuthApi } from "@/utils/ms_auth";
 
 export class AppointmentOutboundRequestsPrivateApi {
@@ -12,7 +12,7 @@ export class AppointmentOutboundRequestsPrivateApi {
     providerNameToSchedule: string;
   }) {
     try {
-      const token = await EntraAuthApi.getBearerToken(`api://${AZURE_CLIENT_ID}`);
+      const token = await EntraAuthApi.getBearerToken();
 
       const response = await fetch(
         `${SERVER_ENDPOINT}/api/appointment/outbound/create`,
@@ -41,7 +41,7 @@ export class AppointmentOutboundRequestsPrivateApi {
 
   static async getAppointmentOutboundRequests(practiceId: string) {
     try {
-      const token = await EntraAuthApi.getBearerToken(`api://${AZURE_CLIENT_ID}`);
+      const token = await EntraAuthApi.getBearerToken();
 
       const response = await fetch(
         `${SERVER_ENDPOINT}/api/appointment/outbound/request?practiceId=${practiceId}`,
@@ -69,7 +69,7 @@ export class AppointmentOutboundRequestsPrivateApi {
 
   static async getProvidersForOutboundRequests(practiceId: string) {
     try {
-      const token = await EntraAuthApi.getBearerToken(`api://${AZURE_CLIENT_ID}`);
+      const token = await EntraAuthApi.getBearerToken();
 
       const response = await fetch(
         `${SERVER_ENDPOINT}/api/appointment/outbound/request/providers?practiceId=${practiceId}`,

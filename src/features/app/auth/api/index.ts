@@ -1,11 +1,11 @@
-import { AZURE_CLIENT_ID, SERVER_ENDPOINT } from "@/constants";
+import { SERVER_ENDPOINT } from "@/constants";
 import { Account } from "@/contexts/account/context";
 import { EntraAuthApi } from "../../../../utils/ms_auth";
 
 export class AccountApi {
   static async getAccount(email: string) {
     try {
-      const token = await EntraAuthApi.getBearerToken(`api://${AZURE_CLIENT_ID}`);
+      const token = await EntraAuthApi.getBearerToken();
       
       const response = await fetch(
         `${SERVER_ENDPOINT}/api/account?email=${encodeURIComponent(email)}`,

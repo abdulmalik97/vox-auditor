@@ -1,4 +1,4 @@
-import { AZURE_CLIENT_ID, SERVER_ENDPOINT } from "@/constants";
+import { SERVER_ENDPOINT } from "@/constants";
 import { EntraAuthApi } from "@/utils/ms_auth";
 
 export interface ActivityLogRecord {
@@ -17,7 +17,7 @@ export class ActivityLogPrivateApi {
   static async getActivityLog(practiceId: string) {
     try {
 
-      const token = await EntraAuthApi.getBearerToken(`api://${AZURE_CLIENT_ID}`);
+      const token = await EntraAuthApi.getBearerToken();
       
       const response = await fetch(
         `${SERVER_ENDPOINT}/api/activity-log?practiceId=${practiceId}`,

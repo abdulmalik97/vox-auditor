@@ -1,13 +1,13 @@
 
 import { EntraAuthApi } from "@/utils/ms_auth";
 import { PartialBookAppointmentPayload, Providers, Schedule } from "../model";
-import { AZURE_CLIENT_ID, SERVER_ENDPOINT } from "@/constants";
+import { SERVER_ENDPOINT } from "@/constants";
 import { AppointmentInformation } from "..";
 
 export class BookAppointmentPrivateApi {
   static async getProviders(practiceId: string) {
     try {
-      const token = await EntraAuthApi.getBearerToken(`api://${AZURE_CLIENT_ID}`);
+      const token = await EntraAuthApi.getBearerToken();
 
       const response = await fetch(
         `${SERVER_ENDPOINT}/api/provider?practiceId=${practiceId}`,
@@ -35,7 +35,7 @@ export class BookAppointmentPrivateApi {
 
   static async getSchedule(providerId: string) {
     try {
-      const token = await EntraAuthApi.getBearerToken(`api://${AZURE_CLIENT_ID}`);
+      const token = await EntraAuthApi.getBearerToken();
 
       const response = await fetch(
         `${SERVER_ENDPOINT}/api/schedule?providerId=${providerId}`,
@@ -63,7 +63,7 @@ export class BookAppointmentPrivateApi {
 
   static async verifyUrl(expiryKey: string) {
     try {
-      const token = await EntraAuthApi.getBearerToken(`api://${AZURE_CLIENT_ID}`);
+      const token = await EntraAuthApi.getBearerToken();
 
       const response = await fetch(
         `${SERVER_ENDPOINT}/api/appointment/url/verify`,
@@ -93,7 +93,7 @@ export class BookAppointmentPrivateApi {
 
   static async deactivateUrl(expiryKey: string) {
     try {
-      const token = await EntraAuthApi.getBearerToken(`api://${AZURE_CLIENT_ID}`);
+      const token = await EntraAuthApi.getBearerToken();
 
       const response = await fetch(
         `${SERVER_ENDPOINT}/api/appointment/url/deactivate`,
@@ -121,7 +121,7 @@ export class BookAppointmentPrivateApi {
     appointmentInformation: AppointmentInformation
   ) {
     try {
-      const token = await EntraAuthApi.getBearerToken(`api://${AZURE_CLIENT_ID}`);
+      const token = await EntraAuthApi.getBearerToken();
 
       const partialBookAppointmentPayload: PartialBookAppointmentPayload = {
         providerId: appointmentInformation.providerId,
