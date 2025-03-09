@@ -18,8 +18,8 @@ const ActivityLogView = () => {
   // Custom column definitions
   const customColumns: GridColDef[] = [
     {
-      field: 'reasonForCall',
-      headerName: 'Reason for Call',
+      field: 'callSummary',
+      headerName: 'Call Summary',
       flex: 1,
       renderCell: (params) => (
         <Tooltip title={params.value || ''} arrow>

@@ -5,7 +5,7 @@ export interface ActivityLogRecord {
   id: string;
   practiceId: string;
   patientPhoneNumber: string;
-  reasonForCall: string;
+  callSummary: string;
   status: string;
   createdAt: string;
 }
