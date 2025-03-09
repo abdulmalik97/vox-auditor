@@ -1,6 +1,7 @@
 import { FormControl, InputLabel, Select, MenuItem } from "@mui/material";
 import { AppointmentInformation } from "../..";
 import { Schedule } from "../../model";
+import { BookAppointmentPrivateApi } from "../../api";
 
 interface LocationPickerProps {
   appointmentInformation: AppointmentInformation;
@@ -15,13 +16,24 @@ const LocationPicker = ({
   clearAppointmentInformation,
   updateAppointmentInformation,
 }: LocationPickerProps) => {
-
   const onLocationSelect = (locationId: string) => {
+    
     if (appointmentInformation.locations && appointmentInformation.providers) {
-      updateAppointmentInformation({ locationId: locationId, providerId: Object.keys(appointmentInformation.providers).find((providerId) => 
-        appointmentInformation.providers && appointmentInformation.providers[providerId].locationId === locationId) });
-      if (appointmentInformation.schedule) {
-        clearAppointmentInformation(appointmentInformation.schedule);
+      const providerId = Object.keys(appointmentInformation.providers).find(
+        (providerId) =>
+          appointmentInformation.providers &&
+          appointmentInformation.providers[providerId].locationId === locationId
+      );
+      if (providerId) {
+        BookAppointmentPrivateApi.getSchedule(providerId).then((schedule) => {
+          updateAppointmentInformation({
+            locationId: locationId,
+            providerId: providerId,
+          });
+          if (schedule) {
+            clearAppointmentInformation(schedule);
+          }
+        });
       }
     }
   };
