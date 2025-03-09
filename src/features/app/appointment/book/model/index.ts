@@ -2,10 +2,11 @@ export interface Provider {
   providerFirstName: string;
   providerLastName: string;
   providerSpeciality: string;
+  locationId: string;
 }
 
 export interface Providers {
-  [providerId: string]: Provider;
+  [locationId: string]: Provider;
 }
 
 export interface Schedule {
@@ -15,6 +16,14 @@ export interface Schedule {
     availability: Availability;
   };
 }
+
+export interface Locations {
+  [locationId: string]: {
+      facilityName: string;
+      facilityAddress: string;
+  };
+}
+
 
 export interface Availability {
   [date: string]: {

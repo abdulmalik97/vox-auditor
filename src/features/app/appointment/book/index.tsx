@@ -4,7 +4,7 @@ import { Box, Button, Container, Stack, Typography, Paper, Stepper, Step, StepLa
 import { useEffect, useState } from "react";
 import AppointmentDatePicker from "./components/calender";
 import ProviderPicker from "./components/providers";
-import { Providers, Schedule } from "./model";
+import { Locations, Providers, Schedule } from "./model";
 import { BookAppointmentPrivateApi } from "./api";
 import ProviderSchedule from "./components/schedule";
 import AppointmentConfirmationPage from "./components/pages/appointment-confirmation";
@@ -13,6 +13,7 @@ import { getFirstAvailableDate } from "./utils";
 import AppointmentConfirmedPage from "./components/pages/appointment-confirmed";
 import { useSearchParams } from "next/navigation";
 import EventIcon from '@mui/icons-material/Event';
+import LocationPicker from "./components/locations";
 
 const STEPS = [
   'Select Time',
@@ -23,8 +24,10 @@ const STEPS = [
 
 export interface AppointmentInformation {
   providers?: Providers;
+  locations?: Locations;
   schedule?: Schedule;
   providerId?: string;
+  locationId?: string;
   date?: string;
   time?: string;
   patientFirstName?: string;
@@ -41,7 +44,7 @@ const BookAppointmentView = () => {
   const practiceId = searchParams.get("practiceId") ?? "";
   const expiryKey = searchParams.get("expiryKey") ?? "";
   const [isUrlValid, setIsUrlValid] = useState<boolean>();
-  const [appointmentInformation, setAppointmentInformation] = useState<AppointmentInformation>({});
+  const [appointmentInformation, setAppointmentInformation] = useState<AppointmentInformation>({patientType: "new"});
   const [currentStep, setCurrentStep] = useState(1);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -82,21 +85,31 @@ const BookAppointmentView = () => {
 
     const loadInitialData = async () => {
       try {
+        const locations = await BookAppointmentPrivateApi.getLocations(practiceId);
         const providers = await BookAppointmentPrivateApi.getProviders(practiceId);
-        if (providers) {
+
+        if (locations && providers) {
           updateAppointmentInformation({
+            locations: locations,
             providers: providers,
             providerId: Object.keys(providers)[0],
+            locationId: Object.keys(locations)[0],
           });
 
-          const schedule = await BookAppointmentPrivateApi.getSchedule(
-            Object.keys(providers)[0]
-          );
-          if (schedule) {
-            updateAppointmentInformation({
-              schedule: schedule,
-              date: getFirstAvailableDate(schedule),
-            });
+          const locationId = Object.keys(locations)[0];
+          const providerId = Object.keys(providers).find((providerId) => providers[providerId].locationId === locationId);
+
+          if (providerId) {
+            const schedule = await BookAppointmentPrivateApi.getSchedule(
+              providerId
+            );
+
+            if (schedule) {
+              updateAppointmentInformation({
+                schedule: schedule,
+                date: getFirstAvailableDate(schedule),
+              });
+            }
           }
         }
       } catch (error) {
@@ -192,8 +205,15 @@ const BookAppointmentView = () => {
             {currentStep === 1 && (
               <Stack spacing={3}>
                 <Typography variant="subtitle1" color="text.secondary" align="center">
-                  Select the provider, location, and date/time of your appointment.
+                  Select the location, provider, and date/time of your appointment.
                 </Typography>
+                <Box>
+                  <LocationPicker
+                    clearAppointmentInformation={clearAppointmentInformation}
+                    appointmentInformation={appointmentInformation}
+                    updateAppointmentInformation={updateAppointmentInformation}
+                  />
+                </Box>
                 <Box>
                   <ProviderPicker
                     clearAppointmentInformation={clearAppointmentInformation}
@@ -273,7 +293,7 @@ const BookAppointmentView = () => {
                 variant="contained"
                 disabled={disableNext()}
                 onClick={() => setCurrentStep(currentStep + 1)}
-            >
+              >
                 {"Next"}
               </Button>
             )}

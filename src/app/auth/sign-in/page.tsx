@@ -17,8 +17,6 @@ const SignIn = () => {
 
     const { error } = await supabase.auth.signInWithPassword(data);
 
-    console.log(error);
-
     if (error) {
       if (error.code === "invalid_credentials") {
         return "Invalid username or password.";

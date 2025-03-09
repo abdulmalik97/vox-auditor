@@ -36,16 +36,18 @@ const ProviderPicker = ({
     return;
   }
 
+  const providerIdsForLocation = Object.keys(providers).filter((providerId) => providers[providerId].locationId === appointmentInformation.locationId);
+  
   return (
     <FormControl fullWidth size="small">
       <InputLabel id="provider-label">Provider</InputLabel>
       <Select
         labelId="provider-label"
         label="Provider"
-        value={providerId ? providerId : Object.keys(providers)[0]}
+        value={providerId ? Object.keys(providers).find((providerId) => providers[providerId].locationId === appointmentInformation.locationId) : Object.keys(providers)[0]}
         onChange={(e) => onProviderSelect(e.target.value)}
       >
-        {Object.keys(providers).map((key) => (
+        {providerIdsForLocation.map((key) => (
           <MenuItem key={key} value={key}>
             {"Dr. " +
               providers[key].providerFirstName +

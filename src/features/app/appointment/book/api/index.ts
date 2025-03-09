@@ -1,10 +1,38 @@
 
 import { EntraAuthApi } from "@/utils/ms_auth";
-import { PartialBookAppointmentPayload, Providers, Schedule } from "../model";
+import { Locations, PartialBookAppointmentPayload, Providers, Schedule } from "../model";
 import { SERVER_ENDPOINT } from "@/constants";
 import { AppointmentInformation } from "..";
 
 export class BookAppointmentPrivateApi {
+  static async getLocations(practiceId: string) {
+    try {
+      const token = await EntraAuthApi.getBearerToken();
+
+      const response = await fetch(
+        `${SERVER_ENDPOINT}/api/location?practiceId=${practiceId}`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
+          },
+        }
+      );
+
+      if (!response.ok) {
+        console.log("Error getting locations");
+        return undefined;
+      }
+
+      const data = await response.json();
+
+      return data as Locations;
+    } catch (error) {
+      console.error("Error getting locations", error);
+      throw Error("No locations returned.");
+    }
+  }
+
   static async getProviders(practiceId: string) {
     try {
       const token = await EntraAuthApi.getBearerToken();
