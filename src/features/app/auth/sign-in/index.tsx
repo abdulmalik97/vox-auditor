@@ -99,8 +99,8 @@ const SignInPage = ({ signInAction }: SignPageProps) => {
         <Image
           src="/assets/logo.png"
           alt="Logo"
-          width={48}
-          height={48}
+          width={75}
+          height={75}
           priority
         />
       </Box>
