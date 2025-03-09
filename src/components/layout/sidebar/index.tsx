@@ -7,7 +7,6 @@ import Box from "@mui/material/Box";
 import MenuIcon from "@mui/icons-material/Menu";
 import TimelineIcon from '@mui/icons-material/Timeline';
 import MedicationIcon from '@mui/icons-material/Medication';
-import EventIcon from '@mui/icons-material/Event';
 import LogoutIcon from '@mui/icons-material/Logout';
 import Image from "next/image";
 import { useRouter } from "next/navigation";
@@ -73,11 +72,11 @@ const Sidebar = ({ children }: SidebarProps) => {
       href: "/dashboard/prescription-requests",
       icon: <MedicationIcon />,
     },
-    {
-      text: "Schedule Appointment",
-      href: "/dashboard/pending-requests",
-      icon: <EventIcon />,
-    },
+    // {
+    //   text: "Schedule Appointment",
+    //   href: "/dashboard/pending-requests",
+    //   icon: <EventIcon />,
+    // },
   ];
 
   const drawer = (
