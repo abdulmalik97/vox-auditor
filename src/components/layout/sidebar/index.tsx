@@ -5,9 +5,10 @@ import AppBar from "@mui/material/AppBar";
 import Toolbar from "@mui/material/Toolbar";
 import Box from "@mui/material/Box";
 import MenuIcon from "@mui/icons-material/Menu";
-import TimelineIcon from '@mui/icons-material/Timeline';
-import MedicationIcon from '@mui/icons-material/Medication';
-import LogoutIcon from '@mui/icons-material/Logout';
+import TimelineIcon from "@mui/icons-material/Timeline";
+import MedicationIcon from "@mui/icons-material/Medication";
+import LogoutIcon from "@mui/icons-material/Logout";
+import EventBusyIcon from "@mui/icons-material/EventBusy";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
@@ -66,11 +67,20 @@ const Sidebar = ({ children }: SidebarProps) => {
   };
 
   const tabs = [
-    { text: "Activity Log", href: "/dashboard/activity-log", icon: <TimelineIcon /> },
+    {
+      text: "Activity Log",
+      href: "/dashboard/activity-log",
+      icon: <TimelineIcon />,
+    },
     {
       text: "Prescriptions",
       href: "/dashboard/prescription-requests",
       icon: <MedicationIcon />,
+    },
+    {
+      text: "Cancelled Appointments",
+      href: "/dashboard/cancelled-appointments",
+      icon: <EventBusyIcon />,
     },
     // {
     //   text: "Schedule Appointment",
@@ -80,7 +90,7 @@ const Sidebar = ({ children }: SidebarProps) => {
   ];
 
   const drawer = (
-    <Box sx={{ display: 'flex', flexDirection: 'column', height: '100%' }}>
+    <Box sx={{ display: "flex", flexDirection: "column", height: "100%" }}>
       <Box
         mt={1}
         sx={{
@@ -90,15 +100,15 @@ const Sidebar = ({ children }: SidebarProps) => {
         }}
       >
         <Link href={"/"}>
-          <Image 
-            src="/assets/logo.png" 
-            width={75} 
-            height={75} 
+          <Image
+            src="/assets/logo.png"
+            width={75}
+            height={75}
             alt="Voxology AI"
             style={{
-              objectFit: 'contain',
-              maxWidth: '100%',
-              height: 'auto'
+              objectFit: "contain",
+              maxWidth: "100%",
+              height: "auto",
             }}
           />
         </Link>
@@ -196,9 +206,9 @@ const Sidebar = ({ children }: SidebarProps) => {
           p: 3,
           margin: 2,
           width: { sm: `calc(100% - ${drawerWidth}px)` },
-          backgroundColor: 'white',
+          backgroundColor: "white",
           borderRadius: 2,
-          border: '0.5px solid #ccc',
+          border: "0.5px solid #ccc",
         }}
       >
         {children}

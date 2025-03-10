@@ -1,4 +1,3 @@
-
 import { SERVER_ENDPOINT } from "@/constants";
 import { EntraAuthApi } from "@/utils/ms_auth";
 import { PrescriptionRefillRequest } from "../../model";
@@ -13,6 +12,7 @@ export class PrescriptionRequestsPrivateApi {
           headers: {
             Authorization: `Bearer ${token}`,
             "Content-Type": "application/json",
+            "ngrok-skip-browser-warning": "69420", //to skip local browser warning using ngrok
           },
         }
       );
@@ -44,6 +44,7 @@ export class PrescriptionRequestsPrivateApi {
           headers: {
             Authorization: `Bearer ${token}`,
             "Content-Type": "application/json",
+            "ngrok-skip-browser-warning": "69420", //to skip local browser warning using ngrok
           },
           body: JSON.stringify({
             prescriptionRefillRequestId,

@@ -1,4 +1,4 @@
-import { SERVER_ENDPOINT } from "@/constants"; 
+import { SERVER_ENDPOINT } from "@/constants";
 import { EntraAuthApi } from "@/utils/ms_auth";
 
 export class AppointmentOutboundRequestsPrivateApi {
@@ -21,6 +21,7 @@ export class AppointmentOutboundRequestsPrivateApi {
           headers: {
             Authorization: `Bearer ${token}`,
             "Content-Type": "application/json",
+            "ngrok-skip-browser-warning": "69420", //to skip local browser warning using ngrok
           },
           body: JSON.stringify(data),
         }
@@ -49,6 +50,7 @@ export class AppointmentOutboundRequestsPrivateApi {
           headers: {
             Authorization: `Bearer ${token}`,
             "Content-Type": "application/json",
+            "ngrok-skip-browser-warning": "69420", //to skip local browser warning using ngrok
           },
         }
       );
@@ -77,6 +79,7 @@ export class AppointmentOutboundRequestsPrivateApi {
           headers: {
             Authorization: `Bearer ${token}`,
             "Content-Type": "application/json",
+            "ngrok-skip-browser-warning": "69420", //to skip local browser warning using ngrok
           },
         }
       );

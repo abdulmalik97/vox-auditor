@@ -1,6 +1,10 @@
-
 import { EntraAuthApi } from "@/utils/ms_auth";
-import { Locations, PartialBookAppointmentPayload, Providers, Schedule } from "../model";
+import {
+  Locations,
+  PartialBookAppointmentPayload,
+  Providers,
+  Schedule,
+} from "../model";
 import { SERVER_ENDPOINT } from "@/constants";
 import { AppointmentInformation } from "..";
 
@@ -15,6 +19,7 @@ export class BookAppointmentPrivateApi {
           headers: {
             Authorization: `Bearer ${token}`,
             "Content-Type": "application/json",
+            "ngrok-skip-browser-warning": "69420", //to skip local browser warning using ngrok
           },
         }
       );
@@ -43,6 +48,7 @@ export class BookAppointmentPrivateApi {
           headers: {
             Authorization: `Bearer ${token}`,
             "Content-Type": "application/json",
+            "ngrok-skip-browser-warning": "69420", //to skip local browser warning using ngrok
           },
         }
       );
@@ -71,6 +77,7 @@ export class BookAppointmentPrivateApi {
           headers: {
             Authorization: `Bearer ${token}`,
             "Content-Type": "application/json",
+            "ngrok-skip-browser-warning": "69420", //to skip local browser warning using ngrok
           },
         }
       );
@@ -100,6 +107,7 @@ export class BookAppointmentPrivateApi {
           headers: {
             Authorization: `Bearer ${token}`,
             "Content-Type": "application/json",
+            "ngrok-skip-browser-warning": "69420", //to skip local browser warning using ngrok
           },
           body: JSON.stringify({ expiryKey }),
         }
@@ -110,7 +118,7 @@ export class BookAppointmentPrivateApi {
         return undefined;
       }
 
-      const data = await response.json() as { isUrlValid: boolean };
+      const data = (await response.json()) as { isUrlValid: boolean };
 
       return data.isUrlValid;
     } catch (error) {
@@ -130,6 +138,7 @@ export class BookAppointmentPrivateApi {
           headers: {
             Authorization: `Bearer ${token}`,
             "Content-Type": "application/json",
+            "ngrok-skip-browser-warning": "69420", //to skip local browser warning using ngrok
           },
           body: JSON.stringify({ expiryKey }),
         }
@@ -145,29 +154,32 @@ export class BookAppointmentPrivateApi {
     }
   }
 
-  static async bookAppointment(
-    appointmentInformation: AppointmentInformation
-  ) {
+  static async bookAppointment(appointmentInformation: AppointmentInformation) {
     try {
       const token = await EntraAuthApi.getBearerToken();
 
       const partialBookAppointmentPayload: PartialBookAppointmentPayload = {
         providerId: appointmentInformation.providerId,
-        appointmentDateTime: appointmentInformation.date + " " + appointmentInformation.time,
+        appointmentDateTime:
+          appointmentInformation.date + " " + appointmentInformation.time,
         patientFirstName: appointmentInformation.patientFirstName,
         patientLastName: appointmentInformation.patientLastName,
         patientPhoneNumber: appointmentInformation.patientPhoneNumber,
         patientBirthdate: appointmentInformation.patientBirthdate,
-      }
+      };
 
-      const response = await fetch(`${SERVER_ENDPOINT}/api/appointment/booking`, {
-        method: "POST",
-        headers: {
-          Authorization: `Bearer ${token}`,
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(partialBookAppointmentPayload),
-      });
+      const response = await fetch(
+        `${SERVER_ENDPOINT}/api/appointment/booking`,
+        {
+          method: "POST",
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
+            "ngrok-skip-browser-warning": "69420", //to skip local browser warning using ngrok
+          },
+          body: JSON.stringify(partialBookAppointmentPayload),
+        }
+      );
 
       if (response.status === 400) {
         console.log("Failed to book the appointment.");

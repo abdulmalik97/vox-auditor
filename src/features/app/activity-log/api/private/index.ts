@@ -16,15 +16,15 @@ export class ActivityLogPrivateApi {
    */
   static async getActivityLog(practiceId: string) {
     try {
-
       const token = await EntraAuthApi.getBearerToken();
-      
+
       const response = await fetch(
         `${SERVER_ENDPOINT}/api/activity-log?practiceId=${practiceId}`,
         {
           headers: {
             Authorization: `Bearer ${token}`,
             "Content-Type": "application/json",
+            "ngrok-skip-browser-warning": "69420", //to skip local browser warning using ngrok
           },
         }
       );

@@ -6,7 +6,7 @@ export class AccountApi {
   static async getAccount(email: string) {
     try {
       const token = await EntraAuthApi.getBearerToken();
-      
+
       const response = await fetch(
         `${SERVER_ENDPOINT}/api/account?email=${encodeURIComponent(email)}`,
         {
@@ -14,6 +14,7 @@ export class AccountApi {
           headers: {
             Authorization: `Bearer ${token}`,
             "Content-Type": "application/json",
+            "ngrok-skip-browser-warning": "69420", //to skip local browser warning using ngrok
           },
         }
       );
