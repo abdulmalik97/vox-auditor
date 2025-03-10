@@ -10,6 +10,7 @@ const SignIn = () => {
 
     // type-casting here for convenience
     // in practice, you should validate your inputs
+    // and handle errors appropriately
     const data = {
       email: formData.get("email") as string,
       password: formData.get("password") as string,
