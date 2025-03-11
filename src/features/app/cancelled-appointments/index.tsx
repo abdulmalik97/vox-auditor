@@ -57,13 +57,6 @@ const CancelledAppointmentsView = () => {
 
             const dateValue = appointment.appointment_datetime || "";
 
-            // Handle provider information
-            const providerName = appointment.provider_id
-              ? `${appointment.provider_first_name || ""} ${
-                  appointment.provider_last_name || ""
-                }`
-              : "Provider not mentioned";
-
             // Handle patient information
             const patientName = `${appointment.first_name || ""} ${
               appointment.last_name || ""
@@ -74,7 +67,6 @@ const CancelledAppointmentsView = () => {
               appointmentDateTime: dateValue,
               patientName: patientName,
               patientPhoneNumber: appointment.primary_phone_number || "",
-              providerName: providerName,
               appointmentType: appointment.appointment_type || "",
               reasonForVisit: appointment.reason_for_visit || "",
               status: appointment.status || "CANCELLED",
@@ -195,7 +187,6 @@ const CancelledAppointmentsView = () => {
               columnLabels={{
                 patientName: "Patient Name",
                 patientPhoneNumber: "Phone Number",
-                providerName: "Provider",
                 appointmentDateTime: "Appointment Date & Time",
                 appointmentType: "Type",
                 reasonForVisit: "Reason",
