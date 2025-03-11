@@ -1,7 +1,6 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-import dayjs from "dayjs";
 import {
   Container,
   Box,
@@ -55,11 +54,8 @@ const CancelledAppointmentsView = () => {
       if (response) {
         setCancelledAppointments(
           response.cancelledAppointments.map((appointment) => {
-            // Format the appointment date and time
+
             const dateValue = appointment.appointment_datetime || "";
-            const formattedDateTime = dateValue 
-              ? dayjs(dateValue).format("MM/DD/YYYY, hh:mm A")
-              : "";
 
             // Handle provider information
             const providerName = appointment.provider_id
@@ -75,7 +71,7 @@ const CancelledAppointmentsView = () => {
 
             return {
               id: appointment.id || appointment.appointmentId || "",
-              appointmentDateTime: formattedDateTime,
+              appointmentDateTime: dateValue,
               patientName: patientName,
               patientPhoneNumber: appointment.primary_phone_number || "",
               providerName: providerName,
