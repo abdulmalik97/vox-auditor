@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
+import dayjs from "dayjs";
 import {
   Container,
   Box,
@@ -56,14 +57,8 @@ const CancelledAppointmentsView = () => {
           response.cancelledAppointments.map((appointment) => {
             // Format the appointment date and time
             const dateValue = appointment.appointment_datetime || "";
-            const formattedDateTime = dateValue
-              ? new Date(dateValue).toLocaleString("en-US", {
-                  month: "2-digit",
-                  day: "2-digit",
-                  year: "numeric",
-                  hour: "2-digit",
-                  minute: "2-digit",
-                })
+            const formattedDateTime = dateValue 
+              ? dayjs(dateValue).format("MM/DD/YYYY, hh:mm A")
               : "";
 
             // Handle provider information
