@@ -44,7 +44,7 @@ const ProviderPicker = ({
       <Select
         labelId="provider-label"
         label="Provider"
-        value={providerId ? Object.keys(providers).find((providerId) => providers[providerId].locationId === appointmentInformation.locationId) : Object.keys(providers)[0]}
+        value={providerId ? providerId : Object.keys(providers).find((providerId) => providers[providerId].locationId === appointmentInformation.locationId)}
         onChange={(e) => onProviderSelect(e.target.value)}
       >
         {providerIdsForLocation.map((key) => (

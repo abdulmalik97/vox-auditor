@@ -89,15 +89,16 @@ const BookAppointmentView = () => {
         const providers = await BookAppointmentPrivateApi.getProviders(practiceId);
 
         if (locations && providers) {
-          updateAppointmentInformation({
-            locations: locations,
-            providers: providers,
-            providerId: Object.keys(providers)[0],
-            locationId: Object.keys(locations)[0],
-          });
 
           const locationId = Object.keys(locations)[0];
           const providerId = Object.keys(providers).find((providerId) => providers[providerId].locationId === locationId);
+          
+          updateAppointmentInformation({
+            locations: locations,
+            providers: providers,
+            providerId: providerId,
+            locationId: Object.keys(locations)[0],
+          });
 
           if (providerId) {
             const schedule = await BookAppointmentPrivateApi.getSchedule(
