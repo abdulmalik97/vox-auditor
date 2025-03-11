@@ -34,8 +34,8 @@ const AppointmentDetails = ({
       <Typography>{getProviderSpeciality()}</Typography>
       <Divider sx={{ my: 2 }} />
       <Typography fontWeight={600}>Clinic Information</Typography>
-      <Typography>{"Medical Services Of The Border Wyoming"}</Typography>
-      <Typography>{"2121 Wyoming Ave, El Paso, TX 79903"}</Typography>
+      <Typography>{appointmentInformation.locationName}</Typography>
+      <Typography>{appointmentInformation.locationAddress}</Typography>
       <Divider sx={{ my: 2 }} />
       <Typography fontWeight={600}>Appointment Time</Typography>
       <Typography>
