@@ -27,8 +27,9 @@ const ProviderSchedule = ({
 
     for (const key of Object.keys(schedule)) {
       const location = schedule[key];
+      const foundSelectedDate = Object.keys(location.availability).find((key) => location.availability[key].dateInYYYYMMDD === selectedDate);
 
-      if (location.availability[selectedDate]) {
+      if (foundSelectedDate) {
         elements.push(
           <Box pb={4} key={key}>
             <Box pb={2} textAlign={{ xs: "center", sm: "center" }}>
@@ -46,7 +47,7 @@ const ProviderSchedule = ({
               justifyContent={{ xs: "center", sm: "center" }}
               sx={{ width: "100%" }}
             >
-              {location.availability[selectedDate].formattedTimes.map(
+              {location.availability[foundSelectedDate].formattedTimes.map(
                 (time, index) => (
                   <Card
                     key={index}

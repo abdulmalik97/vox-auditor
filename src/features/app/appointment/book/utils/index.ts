@@ -10,7 +10,7 @@ export const getFirstAvailableDate = (schedule: Schedule) => {
     for (const practiceId of Object.keys(schedule)) {
       const dates = Object.keys(schedule[practiceId].availability);
       if (dates.length > 0) {
-        const firstDate = dates[0];
+        const firstDate = schedule[practiceId].availability[dates[0]].dateInYYYYMMDD;
 
         const formattedDate = dayjs(firstDate, DATE_FORMAT);
         if (minDate === undefined) {
