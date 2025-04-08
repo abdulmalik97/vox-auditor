@@ -17,6 +17,26 @@ const AppointmentDatePicker = ({
 }: AppointmentDatePickerProps) => {
   const DATE_FORMAT = "YYYY-MM-DD";
 
+
+  const getDatesWithAvailability = () => {
+    const datesWithAvailability = [];
+    if (appointmentInformation.schedule) {
+      for (const practiceId of Object.keys(appointmentInformation.schedule)) {
+        const dates = Object.keys(appointmentInformation.schedule[practiceId].availability);
+        for(const date of dates) {
+          datesWithAvailability.push(appointmentInformation.schedule[practiceId].availability[date].dateInYYYYMMDD);
+        }
+      }
+    }
+    return datesWithAvailability;
+  };
+
+  const shouldDisableDate = (date: dayjs.Dayjs) => {
+    const availableDates = getDatesWithAvailability();
+    const formattedDate = date.format(DATE_FORMAT);
+    return !availableDates.includes(formattedDate);
+  };
+
   const getMinDate = () => {
     if (appointmentInformation.schedule) {
       const firstDateAvailable = getFirstAvailableDate(
@@ -77,6 +97,7 @@ const AppointmentDatePicker = ({
             : minDate
         }
         onChange={handleDateChange}
+        shouldDisableDate={shouldDisableDate}
       />
     </LocalizationProvider>
   );

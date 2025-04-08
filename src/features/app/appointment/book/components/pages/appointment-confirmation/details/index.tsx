@@ -53,7 +53,7 @@ const AppointmentDetails = ({
       <Typography>
         Phone: {appointmentInformation.patientPhoneNumber}
       </Typography>
-      <Typography>Status: {"New Patient"}</Typography>
+      <Typography>Status: {appointmentInformation.patientType}</Typography>
     </>
   );
 };

@@ -44,7 +44,7 @@ const BookAppointmentView = () => {
   const practiceId = searchParams.get("practiceId") ?? "";
   const expiryKey = searchParams.get("expiryKey") ?? "";
   const [isUrlValid, setIsUrlValid] = useState<boolean>();
-  const [appointmentInformation, setAppointmentInformation] = useState<AppointmentInformation>({patientType: "new"});
+  const [appointmentInformation, setAppointmentInformation] = useState<AppointmentInformation>({patientType: "New Patient"});
   const [currentStep, setCurrentStep] = useState(1);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -223,6 +223,9 @@ const BookAppointmentView = () => {
                   />
                 </Box>
                 <Box>
+                  <Typography variant="subtitle2" color="text.secondary" align="center">
+                    Note that some dates are disabled as there is no availability for those dates.
+                  </Typography>
                   <AppointmentDatePicker
                     appointmentInformation={appointmentInformation}
                     updateAppointmentInformation={updateAppointmentInformation}

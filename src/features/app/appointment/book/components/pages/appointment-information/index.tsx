@@ -1,5 +1,6 @@
 import { Typography, Stack, TextField, MenuItem } from "@mui/material";
 import { AppointmentInformation } from "../../..";
+import { useState } from "react";
 
 interface AppointmentInformationPageProps {
   appointmentInformation: AppointmentInformation;
@@ -59,6 +60,8 @@ const AppointmentInformationPage = ({
           size="small"
           type="tel"
           defaultValue={appointmentInformation.patientPhoneNumber || ""}
+          error={appointmentInformation.patientPhoneNumber !== undefined && appointmentInformation.patientPhoneNumber.length !== 10}
+          helperText={appointmentInformation.patientPhoneNumber !== undefined && appointmentInformation.patientPhoneNumber.length !== 10 ? "Phone number must be 10 digits" : ""}
           onBlur={(e) =>
             updateAppointmentInformation({
               patientPhoneNumber: e.target.value,
@@ -72,13 +75,13 @@ const AppointmentInformationPage = ({
             })
           }
           select
-          value={appointmentInformation.patientType || "new"}
+          value={appointmentInformation.patientType || "New Patient"}
           label="Patient Type"
           fullWidth
           size="small"
         >
-          <MenuItem value="new">New Patient</MenuItem>
-          <MenuItem value="existing">Existing Patient</MenuItem>
+          <MenuItem value="New Patient">New Patient</MenuItem>
+          <MenuItem value="Existing Patient">Existing Patient</MenuItem>
         </TextField>
       </Stack>
     </>
