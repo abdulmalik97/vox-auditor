@@ -1,6 +1,5 @@
 import { Typography, Stack, TextField, MenuItem } from "@mui/material";
 import { AppointmentInformation } from "../../..";
-import { useState } from "react";
 
 interface AppointmentInformationPageProps {
   appointmentInformation: AppointmentInformation;
