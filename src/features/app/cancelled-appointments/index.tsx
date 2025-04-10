@@ -16,12 +16,12 @@ import {
   MenuItem,
   SelectChangeEvent,
 } from "@mui/material";
-import { CancelledAppointment } from "./model";
 import Table from "@/components/table";
 import { useAccount } from "@/contexts/account";
 import { CancelledAppointmentsApi } from "./api";
 import RefreshIcon from "@mui/icons-material/Refresh";
 import EventBusyIcon from "@mui/icons-material/EventBusy";
+import { CancelledAppointment } from "./model";
 
 interface LocationData {
   facilityName: string;
@@ -46,35 +46,13 @@ const CancelledAppointmentsView = () => {
       setTableLoading(true);
       setError(null);
       const practiceId = currentAccount.practice.practiceId;
-      const response = await CancelledAppointmentsApi.getCancelledAppointments(
+      const cancelledAppointments = await CancelledAppointmentsApi.getCancelledAppointments(
         practiceId,
         selectedLocation
       );
 
-      if (response) {
-        setCancelledAppointments(
-          response.cancelledAppointments.map((appointment) => {
-
-            const dateValue = appointment.appointment_datetime || "";
-
-            // Handle patient information
-            const patientName = `${appointment.first_name || ""} ${
-              appointment.last_name || ""
-            }`;
-
-            return {
-              id: appointment.id || appointment.appointmentId || "",
-              appointmentDateTime: dateValue,
-              patientName: patientName,
-              patientPhoneNumber: appointment.primary_phone_number || "",
-              appointmentType: appointment.appointment_type || "",
-              reasonForVisit: appointment.reason_for_visit || "",
-              status: appointment.status || "CANCELLED",
-              createdAt: appointment.created_at || "",
-              updatedAt: appointment.updated_at || "",
-            };
-          })
-        );
+      if (cancelledAppointments && cancelledAppointments.length > 0) {
+        setCancelledAppointments(cancelledAppointments);
       }
     } catch (err) {
       setError("Failed to load cancelled appointments. Please try again.");
@@ -185,29 +163,13 @@ const CancelledAppointmentsView = () => {
             <Table
               rows={cancelledAppointments}
               columnLabels={{
-                patientName: "Patient Name",
-                patientPhoneNumber: "Phone Number",
-                appointmentDateTime: "Appointment Date & Time",
-                appointmentType: "Type",
-                reasonForVisit: "Reason",
-                status: "Status",
+                first_name: "Patient First Name",
+                last_name: "Patient Last Name",
+                date_of_birth: "Patient Date of Birth",
+                primary_phone_number: "Patient Phone Number",
+                appointment_datetime: "Appointment Date & Time",
               }}
               dateFields={[""]}
-              columnsToExclude={[
-                "appointmentId",
-                "id",
-                "createdAt",
-                "updatedAt",
-                "provider_id",
-                "created_at",
-                "updated_at",
-                "first_name",
-                "last_name",
-                "provider_first_name",
-                "provider_last_name",
-                "appointment_datetime",
-                "primary_phone_number",
-              ]}
               loading={tableLoading}
             />
             {!tableLoading && cancelledAppointments.length === 0 && (

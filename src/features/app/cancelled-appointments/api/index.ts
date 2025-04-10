@@ -1,6 +1,6 @@
 import { SERVER_ENDPOINT } from "@/constants";
 import { EntraAuthApi } from "@/utils/ms_auth";
-import { CancelledAppointmentsResponse } from "../model";
+import { CancelledAppointment } from "../model";
 
 export class CancelledAppointmentsApi {
   static async getCancelledAppointments(
@@ -28,16 +28,7 @@ export class CancelledAppointmentsApi {
 
       const data = await response.json();
 
-      // Handle both the original API response format and the new format
-      if (Array.isArray(data)) {
-        // New format: direct array of appointments
-        return {
-          cancelledAppointments: data,
-        } as CancelledAppointmentsResponse;
-      } else {
-        // Original format
-        return data as CancelledAppointmentsResponse;
-      }
+      return data as CancelledAppointment[];
     } catch (error) {
       console.error("Error getting cancelled appointments", error);
       throw Error("Error getting cancelled appointments");

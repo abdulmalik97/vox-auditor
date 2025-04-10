@@ -9,6 +9,7 @@ import TimelineIcon from "@mui/icons-material/Timeline";
 import MedicationIcon from "@mui/icons-material/Medication";
 import LogoutIcon from "@mui/icons-material/Logout";
 import EventBusyIcon from "@mui/icons-material/EventBusy";
+import SearchIcon from '@mui/icons-material/Search';
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
@@ -81,6 +82,11 @@ const Sidebar = ({ children }: SidebarProps) => {
       text: "Cancelled Appointments",
       href: "/dashboard/cancelled-appointments",
       icon: <EventBusyIcon />,
+    },
+    {
+      text: "Search Appointments",
+      href: "/dashboard/search-appointments",
+      icon: <SearchIcon />,
     },
     // {
     //   text: "Schedule Appointment",
