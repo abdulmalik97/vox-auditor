@@ -11,6 +11,7 @@ import {
   Stack,
   CircularProgress,
   Alert,
+  Tooltip,
 } from "@mui/material";
 import SearchIcon from "@mui/icons-material/Search";
 import { SearchAppointmentsApi } from "./api";
@@ -56,7 +57,7 @@ const SearchAppointmentsView = () => {
     }
   };
 
-  const InfoRow = ({ label, value }: { label: string; value: string }) => (
+  const InfoRow = ({ label, value }: { label: React.ReactNode; value: string }) => (
     <Stack direction="row" spacing={2} sx={{ mb: 2 }}>
       <Box sx={{ width: "40%" }}>
         <Typography variant="subtitle2" color="text.secondary">
@@ -143,7 +144,11 @@ const SearchAppointmentsView = () => {
 
                 {/* Patient Information Section */}
                 <Box sx={{ mb: 3 }}>
-                  <Typography variant="subtitle1" fontWeight="bold" sx={{ mb: 2, color: 'primary.main' }}>
+                  <Typography
+                    variant="subtitle1"
+                    fontWeight="bold"
+                    sx={{ mb: 2, color: "primary.main" }}
+                  >
                     Patient Information
                   </Typography>
                   <InfoRow
@@ -162,7 +167,11 @@ const SearchAppointmentsView = () => {
 
                 {/* Provider Information Section */}
                 <Box sx={{ mb: 3 }}>
-                  <Typography variant="subtitle1" fontWeight="bold" sx={{ mb: 2, color: 'primary.main' }}>
+                  <Typography
+                    variant="subtitle1"
+                    fontWeight="bold"
+                    sx={{ mb: 2, color: "primary.main" }}
+                  >
                     Provider Information
                   </Typography>
                   <InfoRow
@@ -173,7 +182,11 @@ const SearchAppointmentsView = () => {
 
                 {/* Call Information Section */}
                 <Box sx={{ mb: 3 }}>
-                  <Typography variant="subtitle1" fontWeight="bold" sx={{ mb: 2, color: 'primary.main' }}>
+                  <Typography
+                    variant="subtitle1"
+                    fontWeight="bold"
+                    sx={{ mb: 2, color: "primary.main" }}
+                  >
                     Call Information
                   </Typography>
                   <InfoRow
@@ -190,14 +203,27 @@ const SearchAppointmentsView = () => {
                     }
                   />
                   <InfoRow
-                    label="Reason for Call"
+                    label={
+                      <Stack direction="row" spacing={1} alignItems="center">
+                        <Typography>Reason for Call</Typography>
+                        <Tooltip title="This is an AI generated summary, names and dates may not be 100% accurate">
+                          <Typography variant="caption" color="text.secondary">
+                            (AI Summary)
+                          </Typography>
+                        </Tooltip>
+                      </Stack>
+                    }
                     value={appointmentDetails.reasonForCall}
                   />
                 </Box>
 
                 {/* Facility Information Section */}
                 <Box>
-                  <Typography variant="subtitle1" fontWeight="bold" sx={{ mb: 2, color: 'primary.main' }}>
+                  <Typography
+                    variant="subtitle1"
+                    fontWeight="bold"
+                    sx={{ mb: 2, color: "primary.main" }}
+                  >
                     Facility Information
                   </Typography>
                   <InfoRow
