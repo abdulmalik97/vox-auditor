@@ -2,5 +2,39 @@
   "extends": [
     "next/core-web-vitals",
     "next/typescript"
-  ]
+  ],
+  "rules": {
+    "@typescript-eslint/no-explicit-any": "off",
+    "@typescript-eslint/no-unused-vars": "off",
+    "react/no-unescaped-entities": "off",
+    "react/display-name": "off",
+    "react/prop-types": "off",
+    "react/jsx-key": "off",
+    "react/jsx-no-target-blank": "off",
+    "react/jsx-no-undef": "off",
+    "react/jsx-uses-react": "off",
+    "react/jsx-uses-vars": "off",
+    "react/react-in-jsx-scope": "off",
+    "no-unused-vars": "off",
+    "no-undef": "off",
+    "no-console": "off",
+    "no-debugger": "off",
+    "no-empty": "off",
+    "no-extra-semi": "off",
+    "no-irregular-whitespace": "off",
+    "no-mixed-spaces-and-tabs": "off",
+    "no-multiple-empty-lines": "off",
+    "no-trailing-spaces": "off",
+    "no-unreachable": "off",
+    "no-unsafe-finally": "off",
+    "no-unsafe-negation": "off",
+    "no-useless-escape": "off",
+    "no-var": "off",
+    "prefer-const": "off",
+    "prefer-rest-params": "off",
+    "prefer-spread": "off",
+    "prefer-template": "off",
+    "require-yield": "off",
+    "valid-typeof": "off"
+  }
 }

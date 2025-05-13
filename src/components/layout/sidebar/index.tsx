@@ -10,6 +10,13 @@ import MedicationIcon from "@mui/icons-material/Medication";
 import LogoutIcon from "@mui/icons-material/Logout";
 import EventBusyIcon from "@mui/icons-material/EventBusy";
 import SearchIcon from '@mui/icons-material/Search';
+import AnalyticsIcon from '@mui/icons-material/Analytics';
+import InventoryIcon from '@mui/icons-material/Inventory';
+import SpeedIcon from '@mui/icons-material/Speed';
+import VerifiedIcon from '@mui/icons-material/Verified';
+import GavelIcon from '@mui/icons-material/Gavel';
+import SentimentSatisfiedIcon from '@mui/icons-material/SentimentSatisfied';
+import PersonIcon from '@mui/icons-material/Person';
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
@@ -25,7 +32,10 @@ import {
   ListItemButton,
   ListItemIcon,
   ListItemText,
+  Collapse,
 } from "@mui/material";
+import ExpandLess from '@mui/icons-material/ExpandLess';
+import ExpandMore from '@mui/icons-material/ExpandMore';
 
 const drawerWidth = 240;
 
@@ -35,10 +45,14 @@ interface SidebarProps {
 
 const Sidebar = ({ children }: SidebarProps) => {
   const router = useRouter();
-  const { setAuthUser, setAccount } = useAccount();
+  const { setAuthUser, setAccount, authUser } = useAccount();
   const supabase = createClientComponentClient();
   const [mobileOpen, setMobileOpen] = React.useState(false);
   const [isClosing, setIsClosing] = React.useState(false);
+  const [analyticsOpen, setAnalyticsOpen] = React.useState(false);
+  const [currentAnalyticsTab, setCurrentAnalyticsTab] = React.useState("Inventory");
+
+  const isTestUser = authUser?.email?.toLowerCase().includes('test');
 
   const handleLogout = async () => {
     try {
@@ -73,27 +87,66 @@ const Sidebar = ({ children }: SidebarProps) => {
       href: "/dashboard/activity-log",
       icon: <TimelineIcon />,
     },
-    {
-      text: "Prescriptions",
-      href: "/dashboard/prescription-requests",
-      icon: <MedicationIcon />,
-    },
-    {
-      text: "Cancelled Appointments",
-      href: "/dashboard/cancelled-appointments",
-      icon: <EventBusyIcon />,
-    },
-    {
-      text: "Search Appointments",
-      href: "/dashboard/search-appointments",
-      icon: <SearchIcon />,
-    },
-    // {
-    //   text: "Schedule Appointment",
-    //   href: "/dashboard/pending-requests",
-    //   icon: <EventIcon />,
-    // },
+    ...(isTestUser ? [] : [
+      // {
+      //   text: "Prescriptions",
+      //   href: "/dashboard/prescription-requests",
+      //   icon: <MedicationIcon />,
+      // },
+      // {
+      //   text: "Cancelled Appointments",
+      //   href: "/dashboard/cancelled-appointments",
+      //   icon: <EventBusyIcon />,
+      // },
+      // {
+      //   text: "Search Appointments",
+      //   href: "/dashboard/search-appointments",
+      //   icon: <SearchIcon />,
+      // },
+    ]),
   ];
+
+  const analyticsTabs = [
+    {
+      text: "Inventory",
+      href: "/dashboard/auditor-analytics/inventory",
+      icon: <InventoryIcon />,
+    },
+    {
+      text: "Productivity",
+      href: "/dashboard/auditor-analytics/productivity",
+      icon: <SpeedIcon />,
+    },
+    {
+      text: "Quality",
+      href: "/dashboard/auditor-analytics/quality",
+      icon: <VerifiedIcon />,
+    },
+    {
+      text: "Compliance",
+      href: "/dashboard/auditor-analytics/compliance",
+      icon: <GavelIcon />,
+    },
+    {
+      text: "Patient Satisfaction",
+      href: "/dashboard/auditor-analytics/patient-satisfaction",
+      icon: <SentimentSatisfiedIcon />,
+    },
+    {
+      text: "Agent Scorecard",
+      href: "/dashboard/auditor-analytics/agent-insights",
+      icon: <PersonIcon />,
+    },
+  ];
+
+  // Add effect to update current tab based on route
+  React.useEffect(() => {
+    const path = window.location.pathname;
+    const currentTab = analyticsTabs.find(tab => tab.href === path);
+    if (currentTab) {
+      setCurrentAnalyticsTab(currentTab.text);
+    }
+  }, []);
 
   const drawer = (
     <Box sx={{ display: "flex", flexDirection: "column", height: "100%" }}>
@@ -129,6 +182,34 @@ const Sidebar = ({ children }: SidebarProps) => {
             </ListItemButton>
           </ListItem>
         ))}
+        
+        {/* Auditor Analytics Section */}
+        <ListItem disablePadding>
+          <ListItemButton onClick={() => setAnalyticsOpen(!analyticsOpen)}>
+            <ListItemIcon>
+              <AnalyticsIcon />
+            </ListItemIcon>
+            <ListItemText primary="Audit Analytics" />
+            {analyticsOpen ? <ExpandLess /> : <ExpandMore />}
+          </ListItemButton>
+        </ListItem>
+        <Collapse in={analyticsOpen} timeout="auto" unmountOnExit>
+          <List component="div" disablePadding>
+            {analyticsTabs.map((tab) => (
+              <ListItem key={tab.text} disablePadding>
+                <ListItemButton 
+                  component={Link} 
+                  href={tab.href}
+                  sx={{ pl: 4 }}
+                  onClick={() => setCurrentAnalyticsTab(tab.text)}
+                >
+                  <ListItemIcon>{tab.icon}</ListItemIcon>
+                  <ListItemText primary={tab.text} />
+                </ListItemButton>
+              </ListItem>
+            ))}
+          </List>
+        </Collapse>
       </List>
       <Box sx={{ flexGrow: 1 }} />
       <Divider />
