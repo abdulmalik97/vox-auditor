@@ -65,7 +65,7 @@ export default function AgentInsights() {
   // Calculate current data based on date range
   const currentData = useMemo(() => {
     return baseData[dateRange as keyof typeof baseData];
-  }, [dateRange]);
+  }, [dateRange, baseData]);
 
   // Criteria Data
   const criteriaData = [

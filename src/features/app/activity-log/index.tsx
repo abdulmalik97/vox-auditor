@@ -55,7 +55,7 @@ const ActivityLogView = () => {
 
   useEffect(() => {
     loadActivityLog();
-  }, [currentAccount]);
+  }, [currentAccount, loadActivityLog]);
 
   return (
     <Container maxWidth={false}>

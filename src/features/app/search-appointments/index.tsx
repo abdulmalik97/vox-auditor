@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import {
   Box,
   Button,
@@ -28,13 +28,7 @@ const SearchAppointmentsView = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  useEffect(() => {
-    if (appointmentIdFromUrl) {
-      handleSearch();
-    }
-  }, [appointmentIdFromUrl]);
-
-  const handleSearch = async () => {
+  const handleSearch = useCallback(async () => {
     if (!appointmentId.trim()) {
       setError("Please enter an appointment ID");
       return;
@@ -55,7 +49,13 @@ const SearchAppointmentsView = () => {
     } finally {
       setLoading(false);
     }
-  };
+  }, [appointmentId]);
+
+  useEffect(() => {
+    if (appointmentIdFromUrl) {
+      handleSearch();
+    }
+  }, [appointmentIdFromUrl, handleSearch]);
 
   const InfoRow = ({ label, value }: { label: React.ReactNode; value: string }) => (
     <Stack direction="row" spacing={2} sx={{ mb: 2 }}>

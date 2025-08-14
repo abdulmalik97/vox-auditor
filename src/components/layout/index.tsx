@@ -20,7 +20,7 @@ const Layout = ({ children, authUser }: LayoutProps) => {
     };
 
     fetchUser();
-  }, []);
+  }, [authUser, setAuthUser]);
 
   return (
     <>

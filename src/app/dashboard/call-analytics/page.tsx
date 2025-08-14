@@ -262,7 +262,11 @@ export default function CallAnalyticsDashboard() {
       const key = r.timestamp.slice(0, 10);
       if (!map[key]) map[key] = { date: key, total: 0, inScope: 0, outScope: 0, resolved: 0 };
       map[key].total++;
-      r.scope === "in" ? map[key].inScope++ : map[key].outScope++;
+      if (r.scope === "in") {
+        map[key].inScope++;
+      } else {
+        map[key].outScope++;
+      }
       if (r.resolved) map[key].resolved++;
     }
     return Object.values(map).sort((a, b) => a.date.localeCompare(b.date));

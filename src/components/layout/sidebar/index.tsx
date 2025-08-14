@@ -152,7 +152,7 @@ const Sidebar = ({ children }: SidebarProps) => {
     if (currentTab) {
       setCurrentAnalyticsTab(currentTab.text);
     }
-  }, []);
+  }, [analyticsTabs]);
 
   const drawer = (
     <Box sx={{ display: "flex", flexDirection: "column", height: "100%" }}>

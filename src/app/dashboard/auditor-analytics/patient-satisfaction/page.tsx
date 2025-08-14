@@ -53,7 +53,7 @@ export default function PatientSatisfaction() {
   // Calculate current data based on date range
   const currentData = useMemo(() => {
     return baseData[dateRange as keyof typeof baseData];
-  }, [dateRange]);
+  }, [dateRange, baseData]);
 
   const handleCustomDateRange = () => {
     if (customStartDate && customEndDate) {

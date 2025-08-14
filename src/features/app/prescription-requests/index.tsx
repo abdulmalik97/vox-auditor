@@ -56,7 +56,7 @@ const PrescriptionRequestsView = () => {
 
   useEffect(() => {
     loadPrescriptionRequests();
-  }, [currentAccount, statusFilter]);
+  }, [currentAccount, statusFilter, loadPrescriptionRequests]);
 
   const handleOpenModal = (refillRequest: PrescriptionRefillRequest) => {
     setRefillRequest(refillRequest);

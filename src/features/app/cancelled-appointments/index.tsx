@@ -73,13 +73,13 @@ const CancelledAppointmentsView = () => {
         setSelectedLocation(locationIds[0]);
       }
     }
-  }, [currentAccount]);
+  }, [currentAccount, selectedLocation]);
 
   useEffect(() => {
     if (selectedLocation) {
       loadCancelledAppointments();
     }
-  }, [selectedLocation]);
+  }, [selectedLocation, loadCancelledAppointments]);
 
   const handleLocationChange = (event: SelectChangeEvent) => {
     setSelectedLocation(event.target.value);

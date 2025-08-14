@@ -110,7 +110,7 @@ const AppointmentOutboundRequestsView = () => {
     if (currentAccount?.practice.locations) {
       setLocations(currentAccount.practice.locations);
     }
-  }, [currentAccount]);
+  }, [currentAccount, loadRequests]);
 
   const [modalOpen, setModalOpen] = useState(false);
   const [outreachModalOpen, setOutreachModalOpen] = useState(false);
