@@ -17,6 +17,7 @@ import VerifiedIcon from '@mui/icons-material/Verified';
 import GavelIcon from '@mui/icons-material/Gavel';
 import SentimentSatisfiedIcon from '@mui/icons-material/SentimentSatisfied';
 import PersonIcon from '@mui/icons-material/Person';
+import CallIcon from '@mui/icons-material/Call';
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
@@ -86,6 +87,11 @@ const Sidebar = ({ children }: SidebarProps) => {
       text: "Activity Log",
       href: "/dashboard/activity-log",
       icon: <TimelineIcon />,
+    },
+    {
+      text: "Call Analytics",
+      href: "/dashboard/call-analytics",
+      icon: <CallIcon />,
     },
     ...(isTestUser ? [] : [
       // {
