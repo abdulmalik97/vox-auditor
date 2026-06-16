@@ -1,10 +1,12 @@
-"use client";
-
-import React from "react";
+import React, { Suspense } from "react";
 import SearchAppointmentsView from "@/features/app/search-appointments";
 
 const SearchAppointmentsPage = () => {
-  return <SearchAppointmentsView />;
+  return (
+    <Suspense fallback={null}>
+      <SearchAppointmentsView />
+    </Suspense>
+  );
 };
 
 export default SearchAppointmentsPage;
