@@ -1,27 +1,12 @@
 "use client";
-import { useAccount } from "@/contexts/account";
 import Sidebar from "./sidebar";
-import React, { useEffect } from "react";
-import { AuthUser } from "@supabase/supabase-js";
+import React from "react";
 
 interface LayoutProps {
-  authUser: AuthUser | null;
   children: React.ReactNode;
 }
 
-const Layout = ({ children, authUser }: LayoutProps) => {
-  const { setAuthUser } = useAccount();
-
-  useEffect(() => {
-    const fetchUser = async () => {
-      if (authUser) {
-        setAuthUser(authUser);
-      }
-    };
-
-    fetchUser();
-  }, [authUser, setAuthUser]);
-
+const Layout = ({ children }: LayoutProps) => {
   return (
     <>
       <Sidebar>{children}</Sidebar>

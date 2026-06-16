@@ -6,10 +6,6 @@ import Toolbar from "@mui/material/Toolbar";
 import Box from "@mui/material/Box";
 import MenuIcon from "@mui/icons-material/Menu";
 import TimelineIcon from "@mui/icons-material/Timeline";
-import MedicationIcon from "@mui/icons-material/Medication";
-import LogoutIcon from "@mui/icons-material/Logout";
-import EventBusyIcon from "@mui/icons-material/EventBusy";
-import SearchIcon from '@mui/icons-material/Search';
 import AnalyticsIcon from '@mui/icons-material/Analytics';
 import InventoryIcon from '@mui/icons-material/Inventory';
 import SpeedIcon from '@mui/icons-material/Speed';
@@ -19,9 +15,6 @@ import SentimentSatisfiedIcon from '@mui/icons-material/SentimentSatisfied';
 import PersonIcon from '@mui/icons-material/Person';
 import CallIcon from '@mui/icons-material/Call';
 import Image from "next/image";
-import { useRouter } from "next/navigation";
-import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
-import { useAccount } from "@/contexts/account";
 import {
   CssBaseline,
   Divider,
@@ -45,27 +38,10 @@ interface SidebarProps {
 }
 
 const Sidebar = ({ children }: SidebarProps) => {
-  const router = useRouter();
-  const { setAuthUser, setAccount, authUser } = useAccount();
-  const supabase = createClientComponentClient();
   const [mobileOpen, setMobileOpen] = React.useState(false);
   const [isClosing, setIsClosing] = React.useState(false);
   const [analyticsOpen, setAnalyticsOpen] = React.useState(false);
   const [currentAnalyticsTab, setCurrentAnalyticsTab] = React.useState("Inventory");
-
-  const isTestUser = authUser?.email?.toLowerCase().includes('test');
-
-  const handleLogout = async () => {
-    try {
-      await supabase.auth.signOut();
-      // @ts-expect-error because we know this is the correct type from the context
-      setAuthUser(undefined);
-      setAccount(undefined);
-      router.push("/auth/sign-in");
-    } catch (error) {
-      console.error("Error logging out:", error);
-    }
-  };
 
   const handleDrawerClose = () => {
     setIsClosing(true);
@@ -93,23 +69,6 @@ const Sidebar = ({ children }: SidebarProps) => {
       href: "/dashboard/call-analytics",
       icon: <CallIcon />,
     },
-    ...(isTestUser ? [] : [
-      // {
-      //   text: "Prescriptions",
-      //   href: "/dashboard/prescription-requests",
-      //   icon: <MedicationIcon />,
-      // },
-      // {
-      //   text: "Cancelled Appointments",
-      //   href: "/dashboard/cancelled-appointments",
-      //   icon: <EventBusyIcon />,
-      // },
-      // {
-      //   text: "Search Appointments",
-      //   href: "/dashboard/search-appointments",
-      //   icon: <SearchIcon />,
-      // },
-    ]),
   ];
 
   const analyticsTabs = [
@@ -218,17 +177,6 @@ const Sidebar = ({ children }: SidebarProps) => {
         </Collapse>
       </List>
       <Box sx={{ flexGrow: 1 }} />
-      <Divider />
-      <List>
-        <ListItem disablePadding>
-          <ListItemButton onClick={handleLogout}>
-            <ListItemIcon>
-              <LogoutIcon />
-            </ListItemIcon>
-            <ListItemText primary="Logout" />
-          </ListItemButton>
-        </ListItem>
-      </List>
     </Box>
   );
 
