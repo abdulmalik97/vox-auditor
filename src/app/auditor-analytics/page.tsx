@@ -46,7 +46,7 @@ export default function AuditorAnalytics() {
 
   return (
     <Box sx={{ flexGrow: 1 }}>
-      <Header isAuthed={true} />
+      <Header />
       <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
         <Tabs 
           value={value} 
